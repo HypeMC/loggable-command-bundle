@@ -1,0 +1,66 @@
+{
+    "name": "bizkit/loggable-command-bundle",
+    "description": "Logs the output into a file by dynamically creating a dedicated Monolog file handler for each Symfony command or message handler.",
+    "type": "symfony-bundle",
+    "keywords": [
+        "log",
+        "logging",
+        "loggable",
+        "monolog",
+        "console",
+        "cli"
+    ],
+    "homepage": "https://github.com/HypeMC/loggable-command-bundle",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "HypeMC",
+            "email": "hypemc@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.2",
+        "monolog/monolog": "^1.25.1 || ^2",
+        "psr/log": "^1 || ^2 || ^3",
+        "symfony/config": "^4.4 || ^5.2",
+        "symfony/console": "^4.4 || ^5.2",
+        "symfony/dependency-injection": "^4.4 || ^5.2",
+        "symfony/http-kernel": "^4.4 || ^5.2",
+        "symfony/monolog-bridge": "^4.4 || ^5.2",
+        "symfony/monolog-bundle": "^3.4",
+        "symfony/service-contracts": "^1.1 || ^2"
+    },
+    "require-dev": {
+        "doctrine/annotations": "^1.10.4",
+        "symfony/phpunit-bridge": "^5.2"
+    },
+    "conflict": {
+        "doctrine/annotations": "<1.10.4"
+    },
+    "suggest": {
+        "doctrine/annotations": "For configuring services with the use of an annotation"
+    },
+    "autoload": {
+        "psr-4": {
+            "Bizkit\\LoggableCommandBundle\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Bizkit\\LoggableCommandBundle\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "analyse": "phpstan analyse",
+        "lint": "php-cs-fixer fix -v",
+        "test": "simple-phpunit"
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-main": "1.x-dev"
+        }
+    }
+}

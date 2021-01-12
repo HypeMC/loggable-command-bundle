@@ -1,0 +1,73 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <defaults public="false" />
+
+        <service id="Bizkit\LoggableCommandBundle\Handler\ConsoleHandler">
+            <argument>null</argument>
+            <argument /> <!-- bubble -->
+            <argument /> <!-- verbosity level map -->
+            <argument /> <!-- console formatter options -->
+            <call method="pushProcessor">
+                <argument type="service" id="bizkit_loggable_command.processor.psr_log_message" on-invalid="ignore" />
+            </call>
+            <call method="setFormatter">
+                <argument type="service" id="bizkit_loggable_command.formatter.console" on-invalid="ignore" />
+            </call>
+            <tag name="kernel.event_subscriber" />
+        </service>
+
+        <service id="Bizkit\LoggableCommandBundle\ConfigurationProvider\AttributeConfigurationProvider">
+            <tag name="bizkit_loggable_command.configuration_provider" priority="100" />
+        </service>
+
+        <service id="Bizkit\LoggableCommandBundle\ConfigurationProvider\AnnotationConfigurationProvider">
+            <argument type="service" id="annotation_reader" />
+            <tag name="bizkit_loggable_command.configuration_provider" priority="50" />
+        </service>
+
+        <service id="Bizkit\LoggableCommandBundle\ConfigurationProvider\DefaultConfigurationProvider">
+            <argument /> <!-- handler options -->
+            <tag name="bizkit_loggable_command.configuration_provider" priority="0" />
+        </service>
+
+        <service id="Bizkit\LoggableCommandBundle\ConfigurationProvider\MergedConfigurationProvider">
+            <argument type="tagged_iterator" tag="bizkit_loggable_command.configuration_provider" />
+        </service>
+
+        <service id="Bizkit\LoggableCommandBundle\ConfigurationProvider\ConfigurationProviderInterface"
+                 alias="Bizkit\LoggableCommandBundle\ConfigurationProvider\MergedConfigurationProvider" />
+
+        <service id="Bizkit\LoggableCommandBundle\DependencyInjection\Configurator\LoggableOutputConfigurator">
+            <argument type="service" id="Bizkit\LoggableCommandBundle\ConfigurationProvider\ConfigurationProviderInterface" />
+            <argument type="service" id="Bizkit\LoggableCommandBundle\FilenameProvider\FilenameProviderInterface" />
+            <argument /> <!-- template logger -->
+            <argument type="tagged_locator" tag="bizkit_loggable_command.handler_factory" index-by="type" />
+        </service>
+
+        <service id="Bizkit\LoggableCommandBundle\FilenameProvider\DefaultFilenameProvider" />
+
+        <service id="Bizkit\LoggableCommandBundle\FilenameProvider\FilenameProviderInterface"
+                 alias="Bizkit\LoggableCommandBundle\FilenameProvider\DefaultFilenameProvider" />
+
+        <service id="Bizkit\LoggableCommandBundle\HandlerFactory\AbstractHandlerFactory" abstract="true">
+            <argument type="service" id="bizkit_loggable_command.processor.psr_log_message" on-invalid="null" />
+            <argument type="service" id="bizkit_loggable_command.formatter.file" on-invalid="null" />
+        </service>
+
+        <service id="Bizkit\LoggableCommandBundle\HandlerFactory\StreamHandlerFactory" public="false"
+                 parent="Bizkit\LoggableCommandBundle\HandlerFactory\AbstractHandlerFactory">
+            <tag name="bizkit_loggable_command.handler_factory" type="stream" />
+        </service>
+
+        <service id="Bizkit\LoggableCommandBundle\HandlerFactory\RotatingFileHandlerFactory" public="false"
+                 parent="Bizkit\LoggableCommandBundle\HandlerFactory\AbstractHandlerFactory">
+            <tag name="bizkit_loggable_command.handler_factory" type="rotating_file" />
+        </service>
+    </services>
+
+</container>

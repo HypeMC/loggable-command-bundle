@@ -1,0 +1,14 @@
+# Composer
+composer.lock
+vendor/
+
+# PHP Coding Standards Fixer
+.php-cs-fixer.php
+.php-cs-fixer.cache
+
+# PHPStan
+phpstan.neon
+
+# PHPUnit
+.phpunit.result.cache
+phpunit.xml
