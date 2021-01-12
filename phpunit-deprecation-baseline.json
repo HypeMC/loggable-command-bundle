@@ -1,0 +1,7 @@
+[
+    {
+        "location": "Bizkit\\LoggableCommandBundle\\Tests\\BizkitLoggableCommandBundleTest::testCompilerPassIsRegisteredWithCorrectPriority",
+        "message": "The Symfony\\Bundle\\MonologBundle\\DependencyInjection\\Compiler\\DebugHandlerPass class is deprecated since version 2.12 and will be removed in 4.0. Use AddDebugLogProcessorPass in FrameworkBundle instead.",
+        "count": 1
+    }
+]
