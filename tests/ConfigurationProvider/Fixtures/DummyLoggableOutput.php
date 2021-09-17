@@ -7,7 +7,7 @@ namespace Bizkit\LoggableCommandBundle\Tests\ConfigurationProvider\Fixtures;
 use Bizkit\LoggableCommandBundle\LoggableOutput\LoggableOutputInterface;
 use Bizkit\LoggableCommandBundle\LoggableOutput\LoggableOutputTrait;
 
-final class DummyLoggableOutput implements LoggableOutputInterface
+class DummyLoggableOutput implements LoggableOutputInterface
 {
     use LoggableOutputTrait;
 }

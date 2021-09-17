@@ -6,6 +6,8 @@ namespace Bizkit\LoggableCommandBundle\Tests\ConfigurationProvider;
 
 use Bizkit\LoggableCommandBundle\ConfigurationProvider\AttributeConfigurationProvider;
 use Bizkit\LoggableCommandBundle\ConfigurationProvider\ConfigurationProviderInterface;
+use Bizkit\LoggableCommandBundle\Tests\ConfigurationProvider\Fixtures\DummyChildLoggableOutputWithAttribute;
+use Bizkit\LoggableCommandBundle\Tests\ConfigurationProvider\Fixtures\DummyChildLoggableOutputWithParentAttribute;
 use Bizkit\LoggableCommandBundle\Tests\ConfigurationProvider\Fixtures\DummyLoggableOutput;
 use Bizkit\LoggableCommandBundle\Tests\ConfigurationProvider\Fixtures\DummyLoggableOutputWithAttribute;
 use Bizkit\LoggableCommandBundle\Tests\ConfigurationProvider\Fixtures\DummyLoggableOutputWithAttributeAndParam;
@@ -33,6 +35,34 @@ final class AttributeConfigurationProviderTest extends TestCase
         $this->assertSame(
             $handlerOptions,
             $provider(new DummyLoggableOutputWithAttribute())
+        );
+    }
+
+    public function testProviderReturnsExpectedConfigWhenParentAndChildAttributesAreFound(): void
+    {
+        $handlerOptions = ['filename' => 'child-attribute-test', 'level' => Logger::EMERGENCY, 'bubble' => true];
+
+        $provider = $this->createConfigurationProvider(
+            $this->createContainerBagWithResolveValueMethodCalled($handlerOptions)
+        );
+
+        $this->assertSame(
+            $handlerOptions,
+            $provider(new DummyChildLoggableOutputWithAttribute())
+        );
+    }
+
+    public function testProviderReturnsExpectedConfigWhenParentAttributeIsFound(): void
+    {
+        $handlerOptions = ['filename' => 'attribute-test', 'level' => Logger::EMERGENCY, 'bubble' => true];
+
+        $provider = $this->createConfigurationProvider(
+            $this->createContainerBagWithResolveValueMethodCalled($handlerOptions)
+        );
+
+        $this->assertSame(
+            $handlerOptions,
+            $provider(new DummyChildLoggableOutputWithParentAttribute())
         );
     }
 

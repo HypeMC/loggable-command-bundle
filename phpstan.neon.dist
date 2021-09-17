@@ -7,7 +7,7 @@ parameters:
         - phpstan-autoload.php
     ignoreErrors:
         -
-            message: '#^Call to an undefined method ReflectionObject\:\:getAttributes\(\)\.$#'
+            message: '#^Call to an undefined method ReflectionClass\:\:getAttributes\(\)\.$#'
             count: 1
             path: src/ConfigurationProvider/AttributeConfigurationProvider.php
 

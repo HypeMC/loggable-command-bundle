@@ -8,7 +8,7 @@ use Bizkit\LoggableCommandBundle\ConfigurationProvider\Attribute\LoggableOutput;
 use Bizkit\LoggableCommandBundle\LoggableOutput\LoggableOutputInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
 
-final class AttributeConfigurationProvider implements ConfigurationProviderInterface
+final class AttributeConfigurationProvider extends AbstractConfigurationProvider
 {
     /**
      * @var ContainerBagInterface
@@ -23,16 +23,21 @@ final class AttributeConfigurationProvider implements ConfigurationProviderInter
     public function __invoke(LoggableOutputInterface $loggableOutput): array
     {
         $reflectionObject = new \ReflectionObject($loggableOutput);
+        $configuration = [];
 
-        $reflectionAttributes = $reflectionObject->getAttributes(LoggableOutput::class);
+        do {
+            $reflectionAttributes = $reflectionObject->getAttributes(LoggableOutput::class);
 
-        if (null === $reflectionAttribute = $reflectionAttributes[0] ?? null) {
-            return [];
-        }
+            if (null === $reflectionAttribute = $reflectionAttributes[0] ?? null) {
+                continue;
+            }
 
-        /** @var LoggableOutput $attribute */
-        $attribute = $reflectionAttribute->newInstance();
+            /** @var LoggableOutput $attribute */
+            $attribute = $reflectionAttribute->newInstance();
 
-        return $this->containerBag->resolveValue($attribute->getOptions());
+            $configuration = self::mergeConfigurations($configuration, $attribute->getOptions());
+        } while (false !== $reflectionObject = $reflectionObject->getParentClass());
+
+        return empty($configuration) ? $configuration : $this->containerBag->resolveValue($configuration);
     }
 }

@@ -6,7 +6,7 @@ namespace Bizkit\LoggableCommandBundle\ConfigurationProvider;
 
 use Bizkit\LoggableCommandBundle\LoggableOutput\LoggableOutputInterface;
 
-final class DefaultConfigurationProvider implements ConfigurationProviderInterface
+final class DefaultConfigurationProvider extends AbstractConfigurationProvider
 {
     /**
      * @var array

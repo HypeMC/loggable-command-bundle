@@ -6,6 +6,8 @@ namespace Bizkit\LoggableCommandBundle\Tests\ConfigurationProvider;
 
 use Bizkit\LoggableCommandBundle\ConfigurationProvider\AnnotationConfigurationProvider;
 use Bizkit\LoggableCommandBundle\ConfigurationProvider\ConfigurationProviderInterface;
+use Bizkit\LoggableCommandBundle\Tests\ConfigurationProvider\Fixtures\DummyChildLoggableOutputWithAnnotation;
+use Bizkit\LoggableCommandBundle\Tests\ConfigurationProvider\Fixtures\DummyChildLoggableOutputWithParentAnnotation;
 use Bizkit\LoggableCommandBundle\Tests\ConfigurationProvider\Fixtures\DummyLoggableOutput;
 use Bizkit\LoggableCommandBundle\Tests\ConfigurationProvider\Fixtures\DummyLoggableOutputWithAnnotation;
 use Bizkit\LoggableCommandBundle\Tests\ConfigurationProvider\Fixtures\DummyLoggableOutputWithAnnotationAndParam;
@@ -41,6 +43,34 @@ final class AnnotationConfigurationProviderTest extends TestCase
         $this->assertSame(
             $handlerOptions,
             $provider(new DummyLoggableOutputWithAnnotation())
+        );
+    }
+
+    public function testProviderReturnsExpectedConfigWhenParentAndChildAnnotationsAreFound(): void
+    {
+        $handlerOptions = ['filename' => 'child-annotation-test', 'level' => Logger::CRITICAL, 'max_files' => 4];
+
+        $provider = $this->createConfigurationProvider(
+            $this->createContainerBagWithResolveValueMethodCalled($handlerOptions)
+        );
+
+        $this->assertSame(
+            $handlerOptions,
+            $provider(new DummyChildLoggableOutputWithAnnotation())
+        );
+    }
+
+    public function testProviderReturnsExpectedConfigWhenParentAnnotationIsFound(): void
+    {
+        $handlerOptions = ['filename' => 'annotation-test', 'level' => Logger::CRITICAL, 'max_files' => 4];
+
+        $provider = $this->createConfigurationProvider(
+            $this->createContainerBagWithResolveValueMethodCalled($handlerOptions)
+        );
+
+        $this->assertSame(
+            $handlerOptions,
+            $provider(new DummyChildLoggableOutputWithParentAnnotation())
         );
     }
 

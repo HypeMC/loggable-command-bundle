@@ -9,7 +9,7 @@ use Bizkit\LoggableCommandBundle\LoggableOutput\LoggableOutputInterface;
 use Doctrine\Common\Annotations\Reader as AnnotationsReaderInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
 
-final class AnnotationConfigurationProvider implements ConfigurationProviderInterface
+final class AnnotationConfigurationProvider extends AbstractConfigurationProvider
 {
     /**
      * @var AnnotationsReaderInterface
@@ -30,14 +30,19 @@ final class AnnotationConfigurationProvider implements ConfigurationProviderInte
     public function __invoke(LoggableOutputInterface $loggableOutput): array
     {
         $reflection = new \ReflectionObject($loggableOutput);
+        $configuration = [];
 
-        /** @var LoggableOutput|null $annotation */
-        $annotation = $this->annotationsReader->getClassAnnotation($reflection, LoggableOutput::class);
+        do {
+            /** @var LoggableOutput|null $annotation */
+            $annotation = $this->annotationsReader->getClassAnnotation($reflection, LoggableOutput::class);
 
-        if (null === $annotation) {
-            return [];
-        }
+            if (null === $annotation) {
+                continue;
+            }
 
-        return $this->containerBag->resolveValue($annotation->getOptions());
+            $configuration = self::mergeConfigurations($configuration, $annotation->getOptions());
+        } while (false !== $reflection = $reflection->getParentClass());
+
+        return empty($configuration) ? $configuration : $this->containerBag->resolveValue($configuration);
     }
 }

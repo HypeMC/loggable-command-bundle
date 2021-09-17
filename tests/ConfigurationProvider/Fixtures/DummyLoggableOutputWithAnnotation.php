@@ -12,7 +12,7 @@ use Monolog\Logger;
 /**
  * @LoggableOutput(filename="annotation-test", level=Logger::CRITICAL, maxFiles=4)
  */
-final class DummyLoggableOutputWithAnnotation implements LoggableOutputInterface
+class DummyLoggableOutputWithAnnotation implements LoggableOutputInterface
 {
     use LoggableOutputTrait;
 }

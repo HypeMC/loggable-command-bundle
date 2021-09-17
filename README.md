@@ -229,6 +229,33 @@ class MyMessageHandler implements MessageHandlerInterface, LoggableOutputInterfa
 }
 ```
 
+Attribute options are inherited from all parent classes that have the PHP attribute declared. In case both a parent & a
+child class have the same option defined, the one from the child class has precedence.
+
+```php
+namespace App;
+
+use Bizkit\LoggableCommandBundle\ConfigurationProvider\Attribute\LoggableOutput;
+use Bizkit\LoggableCommandBundle\LoggableOutput\LoggableOutputInterface;
+use Bizkit\LoggableCommandBundle\LoggableOutput\LoggableOutputTrait;
+use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
+
+#[LoggableOutput(path: '%kernel.logs_dir%/messenger/{filename}.log')]
+abstract class MyBaseMessageHandler implements MessageHandlerInterface, LoggableOutputInterface
+{
+    use LoggableOutputTrait;
+}
+
+#[LoggableOutput(filename: 'my_log_name')]
+class MyMessageHandler extends MyBaseMessageHandler
+{
+    public function __invoke(MyMessage $myMessage): void
+    {
+        // ...
+    }
+}
+```
+
 ### Doctrine annotations
 
 If you're using a version of PHP prior to 8,
@@ -268,6 +295,8 @@ class MyLoggableCommand extends LoggableCommand
     }
 }
 ```
+
+Annotation options are also inherited from all parent classes.
 
 ### Adding other Monolog handlers to the output logger
 

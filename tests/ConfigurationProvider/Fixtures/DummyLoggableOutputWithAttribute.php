@@ -10,7 +10,7 @@ use Bizkit\LoggableCommandBundle\LoggableOutput\LoggableOutputTrait;
 use Monolog\Logger;
 
 #[LoggableOutput(filename: 'attribute-test', level: Logger::EMERGENCY, bubble: true)]
-final class DummyLoggableOutputWithAttribute implements LoggableOutputInterface
+class DummyLoggableOutputWithAttribute implements LoggableOutputInterface
 {
     use LoggableOutputTrait;
 }
