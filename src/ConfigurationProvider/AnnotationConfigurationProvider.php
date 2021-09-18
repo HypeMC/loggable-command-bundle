@@ -7,6 +7,7 @@ namespace Bizkit\LoggableCommandBundle\ConfigurationProvider;
 use Bizkit\LoggableCommandBundle\ConfigurationProvider\Attribute\LoggableOutput;
 use Bizkit\LoggableCommandBundle\LoggableOutput\LoggableOutputInterface;
 use Doctrine\Common\Annotations\Reader as AnnotationsReaderInterface;
+use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
 
 final class AnnotationConfigurationProvider implements ConfigurationProviderInterface
 {
@@ -15,9 +16,15 @@ final class AnnotationConfigurationProvider implements ConfigurationProviderInte
      */
     private $annotationsReader;
 
-    public function __construct(AnnotationsReaderInterface $annotationsReader)
+    /**
+     * @var ContainerBagInterface
+     */
+    private $containerBag;
+
+    public function __construct(AnnotationsReaderInterface $annotationsReader, ContainerBagInterface $containerBag)
     {
         $this->annotationsReader = $annotationsReader;
+        $this->containerBag = $containerBag;
     }
 
     public function __invoke(LoggableOutputInterface $loggableOutput): array
@@ -31,6 +38,6 @@ final class AnnotationConfigurationProvider implements ConfigurationProviderInte
             return [];
         }
 
-        return $annotation->getOptions();
+        return $this->containerBag->resolveValue($annotation->getOptions());
     }
 }

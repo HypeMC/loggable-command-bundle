@@ -8,8 +8,12 @@ use Bizkit\LoggableCommandBundle\ConfigurationProvider\AttributeConfigurationPro
 use Bizkit\LoggableCommandBundle\ConfigurationProvider\ConfigurationProviderInterface;
 use Bizkit\LoggableCommandBundle\Tests\ConfigurationProvider\Fixtures\DummyLoggableOutput;
 use Bizkit\LoggableCommandBundle\Tests\ConfigurationProvider\Fixtures\DummyLoggableOutputWithAttribute;
+use Bizkit\LoggableCommandBundle\Tests\ConfigurationProvider\Fixtures\DummyLoggableOutputWithAttributeAndParam;
 use Bizkit\LoggableCommandBundle\Tests\TestCase;
 use Monolog\Logger;
+use Symfony\Component\DependencyInjection\Container;
+use Symfony\Component\DependencyInjection\ParameterBag\ContainerBag;
+use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
 
 /**
  * @requires PHP >= 8.0
@@ -20,23 +24,65 @@ final class AttributeConfigurationProviderTest extends TestCase
 {
     public function testProviderReturnsExpectedConfigWhenAttributeIsFound(): void
     {
-        $provider = $this->createConfigurationProvider();
+        $handlerOptions = ['filename' => 'attribute-test', 'level' => Logger::EMERGENCY, 'bubble' => true];
+
+        $provider = $this->createConfigurationProvider(
+            $this->createContainerBagWithResolveValueMethodCalled($handlerOptions)
+        );
 
         $this->assertSame(
-            ['filename' => 'attribute-test', 'level' => Logger::EMERGENCY, 'bubble' => true],
+            $handlerOptions,
             $provider(new DummyLoggableOutputWithAttribute())
         );
     }
 
     public function testProviderReturnsEmptyConfigWhenAttributeIsNotFound(): void
     {
-        $provider = $this->createConfigurationProvider();
+        $provider = $this->createConfigurationProvider(
+            $this->createContainerBagWithoutResolveValueMethodCalled()
+        );
 
         $this->assertSame([], $provider(new DummyLoggableOutput()));
     }
 
-    private function createConfigurationProvider(): ConfigurationProviderInterface
+    public function testProviderResolvesConfigParameters(): void
     {
-        return new AttributeConfigurationProvider();
+        $handlerOptions = ['filename' => 'attribute-test', 'path' => '/var/log/messenger/{filename}.log'];
+
+        $provider = $this->createConfigurationProvider(
+            new ContainerBag($container = new Container())
+        );
+
+        $container->setParameter('kernel.logs_dir', '/var/log');
+
+        $this->assertSame(
+            $handlerOptions,
+            $provider(new DummyLoggableOutputWithAttributeAndParam())
+        );
+    }
+
+    private function createConfigurationProvider(ContainerBagInterface $containerBag): ConfigurationProviderInterface
+    {
+        return new AttributeConfigurationProvider($containerBag);
+    }
+
+    private function createContainerBagWithResolveValueMethodCalled(array $handlerOptions): ContainerBagInterface
+    {
+        $containerBag = $this->createMock(ContainerBagInterface::class);
+        $containerBag->expects($this->once())
+            ->method('resolveValue')
+            ->with($handlerOptions)
+            ->willReturn($this->returnArgument(0))
+        ;
+
+        return $containerBag;
+    }
+
+    private function createContainerBagWithoutResolveValueMethodCalled(): ContainerBagInterface
+    {
+        $containerBag = $this->createMock(ContainerBagInterface::class);
+        $containerBag->expects($this->never())->method('resolveValue');
+
+        return $containerBag;
     }
 }

@@ -22,11 +22,13 @@
         </service>
 
         <service id="Bizkit\LoggableCommandBundle\ConfigurationProvider\AttributeConfigurationProvider">
+            <argument type="service" id="parameter_bag" />
             <tag name="bizkit_loggable_command.configuration_provider" priority="100" />
         </service>
 
         <service id="Bizkit\LoggableCommandBundle\ConfigurationProvider\AnnotationConfigurationProvider">
             <argument type="service" id="annotation_reader" />
+            <argument type="service" id="parameter_bag" />
             <tag name="bizkit_loggable_command.configuration_provider" priority="50" />
         </service>
 

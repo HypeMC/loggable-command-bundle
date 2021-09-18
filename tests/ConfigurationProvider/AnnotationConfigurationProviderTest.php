@@ -8,11 +8,15 @@ use Bizkit\LoggableCommandBundle\ConfigurationProvider\AnnotationConfigurationPr
 use Bizkit\LoggableCommandBundle\ConfigurationProvider\ConfigurationProviderInterface;
 use Bizkit\LoggableCommandBundle\Tests\ConfigurationProvider\Fixtures\DummyLoggableOutput;
 use Bizkit\LoggableCommandBundle\Tests\ConfigurationProvider\Fixtures\DummyLoggableOutputWithAnnotation;
+use Bizkit\LoggableCommandBundle\Tests\ConfigurationProvider\Fixtures\DummyLoggableOutputWithAnnotationAndParam;
 use Bizkit\LoggableCommandBundle\Tests\TestCase;
 use Doctrine\Common\Annotations\Annotation;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\DocParser;
 use Monolog\Logger;
+use Symfony\Component\DependencyInjection\Container;
+use Symfony\Component\DependencyInjection\ParameterBag\ContainerBag;
+use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
 
 /**
  * @covers \Bizkit\LoggableCommandBundle\ConfigurationProvider\AnnotationConfigurationProvider
@@ -28,23 +32,65 @@ final class AnnotationConfigurationProviderTest extends TestCase
 
     public function testProviderReturnsExpectedConfigWhenAnnotationIsFound(): void
     {
-        $provider = $this->createConfigurationProvider();
+        $handlerOptions = ['filename' => 'annotation-test', 'level' => Logger::CRITICAL, 'max_files' => 4];
+
+        $provider = $this->createConfigurationProvider(
+            $this->createContainerBagWithResolveValueMethodCalled($handlerOptions)
+        );
 
         $this->assertSame(
-            ['filename' => 'annotation-test', 'level' => Logger::CRITICAL, 'max_files' => 4],
+            $handlerOptions,
             $provider(new DummyLoggableOutputWithAnnotation())
         );
     }
 
     public function testProviderReturnsEmptyConfigWhenAnnotationIsNotFound(): void
     {
-        $provider = $this->createConfigurationProvider();
+        $provider = $this->createConfigurationProvider(
+            $this->createContainerBagWithoutResolveValueMethodCalled()
+        );
 
         $this->assertSame([], $provider(new DummyLoggableOutput()));
     }
 
-    private function createConfigurationProvider(): ConfigurationProviderInterface
+    public function testProviderResolvesConfigParameters(): void
     {
-        return new AnnotationConfigurationProvider(new AnnotationReader(new DocParser()));
+        $handlerOptions = ['filename' => 'annotation-test', 'path' => '/var/log/messenger/{filename}.log'];
+
+        $provider = $this->createConfigurationProvider(
+            new ContainerBag($container = new Container())
+        );
+
+        $container->setParameter('kernel.logs_dir', '/var/log');
+
+        $this->assertSame(
+            $handlerOptions,
+            $provider(new DummyLoggableOutputWithAnnotationAndParam())
+        );
+    }
+
+    private function createConfigurationProvider(ContainerBagInterface $containerBag): ConfigurationProviderInterface
+    {
+        return new AnnotationConfigurationProvider(new AnnotationReader(new DocParser()), $containerBag);
+    }
+
+    private function createContainerBagWithResolveValueMethodCalled(array $handlerOptions): ContainerBagInterface
+    {
+        $containerBag = $this->createMock(ContainerBagInterface::class);
+        $containerBag->expects($this->once())
+            ->method('resolveValue')
+            ->with($handlerOptions)
+            ->willReturn($this->returnArgument(0))
+        ;
+
+        return $containerBag;
+    }
+
+    private function createContainerBagWithoutResolveValueMethodCalled(): ContainerBagInterface
+    {
+        $containerBag = $this->createMock(ContainerBagInterface::class);
+        $containerBag->expects($this->never())->method('resolveValue');
+
+        return $containerBag;
     }
 }
