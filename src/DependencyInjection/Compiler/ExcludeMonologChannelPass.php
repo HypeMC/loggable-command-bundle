@@ -19,6 +19,7 @@ final class ExcludeMonologChannelPass implements CompilerPassInterface
         /** @var string[] $exclusiveHandlerNames */
         $exclusiveHandlerNames = [];
 
+        /** @var array<string, array{type: string, elements: list<string>}> $handlersToChannels */
         $handlersToChannels = $container->getParameter('monolog.handlers_to_channels');
         foreach ($handlersToChannels as $id => &$handlersToChannel) {
             if ('exclusive' !== $handlersToChannel['type']) {

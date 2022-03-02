@@ -26,7 +26,9 @@ final class ExcludeMonologChannelPassTest extends TestCase
 
         (new ExcludeMonologChannelPass())->process($container);
 
-        $this->assertSame($expectedElements, $container->getParameter('monolog.handlers_to_channels')['foobar']['elements']);
+        /** @var array<string, array{type: string, elements: list<string>}> $actualElements */
+        $actualElements = $container->getParameter('monolog.handlers_to_channels');
+        $this->assertSame($expectedElements, $actualElements['foobar']['elements']);
     }
 
     public function handlerChannels(): iterable
