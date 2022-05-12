@@ -23,7 +23,7 @@ final class MergedConfigurationProvider extends AbstractConfigurationProvider
         $mergedConfiguration = [];
 
         foreach ($this->configurationProviders as $configurationProvider) {
-            if ([] !== $configuration = $configurationProvider($loggableOutput)) {
+            if ($configuration = $configurationProvider($loggableOutput)) {
                 $mergedConfiguration = self::mergeConfigurations($mergedConfiguration, $configuration);
             }
         }

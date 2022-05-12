@@ -22,7 +22,7 @@ abstract class AbstractConfigurationProvider implements ConfigurationProviderInt
 
         $firstConfiguration += $secondConfiguration;
 
-        if (!empty($extraOptions)) {
+        if ($extraOptions) {
             $firstConfiguration['extra_options'] = $extraOptions;
         }
 

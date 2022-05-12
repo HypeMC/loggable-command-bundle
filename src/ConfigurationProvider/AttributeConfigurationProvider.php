@@ -38,6 +38,6 @@ final class AttributeConfigurationProvider extends AbstractConfigurationProvider
             $configuration = self::mergeConfigurations($configuration, $attribute->getOptions());
         } while (false !== $reflectionObject = $reflectionObject->getParentClass());
 
-        return empty($configuration) ? $configuration : $this->containerBag->resolveValue($configuration);
+        return $configuration ? $this->containerBag->resolveValue($configuration) : $configuration;
     }
 }

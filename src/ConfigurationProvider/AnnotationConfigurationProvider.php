@@ -43,6 +43,6 @@ final class AnnotationConfigurationProvider extends AbstractConfigurationProvide
             $configuration = self::mergeConfigurations($configuration, $annotation->getOptions());
         } while (false !== $reflection = $reflection->getParentClass());
 
-        return empty($configuration) ? $configuration : $this->containerBag->resolveValue($configuration);
+        return $configuration ? $this->containerBag->resolveValue($configuration) : $configuration;
     }
 }
