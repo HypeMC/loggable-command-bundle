@@ -43,7 +43,54 @@ final class ConfigurationTest extends TestCase
                 'extra_options' => [],
                 'enable_annotations' => false,
             ],
-            'process_psr_3_messages' => true,
+            'process_psr_3_messages' => [
+                'enabled' => true,
+            ],
         ], $config);
+    }
+
+    public function testConfigWhenProcessPsr3MessageIsTrue(): void
+    {
+        $config = (new Processor())->processConfiguration(new Configuration(), [
+            'bizkit_loggable_command' => [
+                'process_psr_3_messages' => true,
+            ],
+        ]);
+
+        $this->assertArrayHasKey('process_psr_3_messages', $config);
+        $this->assertSame([
+            'enabled' => true,
+        ], $config['process_psr_3_messages']);
+    }
+
+    public function testConfigWhenProcessPsr3MessageIsFalse(): void
+    {
+        $config = (new Processor())->processConfiguration(new Configuration(), [
+            'bizkit_loggable_command' => [
+                'process_psr_3_messages' => false,
+            ],
+        ]);
+
+        $this->assertArrayHasKey('process_psr_3_messages', $config);
+        $this->assertSame([
+            'enabled' => false,
+        ], $config['process_psr_3_messages']);
+    }
+
+    public function testConfigWhenProcessPsr3MessageIsArray(): void
+    {
+        $config = (new Processor())->processConfiguration(new Configuration(), [
+            'bizkit_loggable_command' => [
+                'process_psr_3_messages' => [
+                    'date_format' => 'Y-m-d',
+                ],
+            ],
+        ]);
+
+        $this->assertArrayHasKey('process_psr_3_messages', $config);
+        $this->assertSame([
+            'date_format' => 'Y-m-d',
+            'enabled' => true,
+        ], $config['process_psr_3_messages']);
     }
 }

@@ -23,6 +23,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\DependencyInjection\Compiler\ResolveInstanceofConditionalsPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Exception\LogicException;
+use Symfony\Component\DependencyInjection\Exception\RuntimeException;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
@@ -323,5 +324,93 @@ final class BizkitLoggableCommandExtensionTest extends TestCase
 
         $this->assertFalse($container->hasDefinition('bizkit_loggable_command.processor.psr_log_message'));
         $this->assertTrue($container->hasAlias('bizkit_loggable_command.processor.psr_log_message'));
+    }
+
+    public function testExceptionIsThrownWhenPsrLogMessageProcessorDoesNotHaveConstructorArguments(): void
+    {
+        if ($this->psrLogMessageProcessorHasConstructorArguments()) {
+            $this->markTestSkipped('Monolog < 1.26 is needed.');
+        }
+
+        $container = new ContainerBuilder();
+        $container->registerExtension($loggableCommandExtension = new BizkitLoggableCommandExtension());
+
+        $loggableCommandExtension->load([[
+            'process_psr_3_messages' => [
+                'date_format' => 'Y-m-d',
+            ],
+        ]], $container);
+
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage(
+            'Monolog 1.26 or higher is required for the "date_format" and "remove_used_context_fields" options to be used.'
+        );
+
+        $loggableCommandExtension->process($container);
+    }
+
+    public function testPsrLogMessageProcessorIsRegisteredWhenTrueWithArgumentsAndMonologServiceDoesNotExist(): void
+    {
+        if (!$this->psrLogMessageProcessorHasConstructorArguments()) {
+            $this->markTestSkipped('Monolog >= 1.26 is needed.');
+        }
+
+        $container = new ContainerBuilder();
+        $container->registerExtension($loggableCommandExtension = new BizkitLoggableCommandExtension());
+
+        $container->register(
+            'monolog.processor.psr_log_message.'.ContainerBuilder::hash([null, true]),
+            PsrLogMessageProcessor::class
+        );
+
+        $loggableCommandExtension->load([[
+            'process_psr_3_messages' => [
+                'enabled' => true,
+                'date_format' => 'Y-m-d',
+            ],
+        ]], $container);
+        $loggableCommandExtension->process($container);
+
+        $this->assertTrue($container->hasDefinition('bizkit_loggable_command.processor.psr_log_message'));
+        $this->assertFalse($container->hasAlias('bizkit_loggable_command.processor.psr_log_message'));
+    }
+
+    public function testPsrLogMessageProcessorIsAliasedWhenTrueWithArgumentsAndMonologServiceExists(): void
+    {
+        if (!$this->psrLogMessageProcessorHasConstructorArguments()) {
+            $this->markTestSkipped('Monolog >= 1.26 is needed.');
+        }
+
+        $container = new ContainerBuilder();
+        $container->registerExtension($loggableCommandExtension = new BizkitLoggableCommandExtension());
+
+        $container->register(
+            'monolog.processor.psr_log_message.'.ContainerBuilder::hash([null, true]),
+            PsrLogMessageProcessor::class
+        );
+
+        $loggableCommandExtension->load([[
+            'process_psr_3_messages' => [
+                'enabled' => true,
+                'remove_used_context_fields' => true,
+            ],
+        ]], $container);
+        $loggableCommandExtension->process($container);
+
+        $this->assertFalse($container->hasDefinition('bizkit_loggable_command.processor.psr_log_message'));
+        $this->assertTrue($container->hasAlias('bizkit_loggable_command.processor.psr_log_message'));
+    }
+
+    private function psrLogMessageProcessorHasConstructorArguments(): bool
+    {
+        static $hasConstructorArguments;
+
+        if (!isset($hasConstructorArguments)) {
+            $r = (new \ReflectionClass(PsrLogMessageProcessor::class))->getConstructor();
+            $hasConstructorArguments = null !== $r && $r->getNumberOfParameters() > 0;
+            unset($r);
+        }
+
+        return $hasConstructorArguments;
     }
 }

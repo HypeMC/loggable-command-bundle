@@ -95,11 +95,28 @@ EOT
                     ->end()
                 ->end()
 
-                ->append(
-                    $monologHandlersConfig->find('process_psr_3_messages')
-                        ->info('Configuration option used by both handlers.')
-                        ->defaultTrue()
-                )
+                ->arrayNode('process_psr_3_messages')
+                    ->info('Configuration option used by both handlers.')
+                    ->example([
+                        false,
+                        ['enabled' => false],
+                        ['date_format' => 'Y-m-d', 'remove_used_context_fields' => true],
+                    ])
+                    ->addDefaultsIfNotSet()
+                    ->beforeNormalization()
+                        ->ifTrue(static function ($v): bool {
+                            return !\is_array($v);
+                        })
+                        ->then(static function ($v): array {
+                            return ['enabled' => $v];
+                        })
+                    ->end()
+                    ->children()
+                        ->booleanNode('enabled')->defaultTrue()->end()
+                        ->scalarNode('date_format')->end()
+                        ->booleanNode('remove_used_context_fields')->end()
+                    ->end()
+                ->end()
             ->end()
 
             ->validate()

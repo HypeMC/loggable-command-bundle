@@ -29,7 +29,7 @@ use Symfony\Component\HttpKernel\DependencyInjection\ConfigurableExtension;
 final class BizkitLoggableCommandExtension extends ConfigurableExtension implements PrependExtensionInterface, CompilerPassInterface
 {
     /**
-     * @var bool
+     * @var array{enabled: bool, date_format?: ?string, remove_used_context_fields?: bool}
      */
     private $processPsr3Messages;
 
@@ -149,12 +149,35 @@ final class BizkitLoggableCommandExtension extends ConfigurableExtension impleme
      */
     private function registerPsrLogMessageProcessor(ContainerBuilder $container): void
     {
-        if (!$this->processPsr3Messages) {
+        if (!$this->processPsr3Messages['enabled']) {
             return;
         }
 
+        static $hasConstructorArguments;
+
+        if (!isset($hasConstructorArguments)) {
+            $r = (new \ReflectionClass(PsrLogMessageProcessor::class))->getConstructor();
+            $hasConstructorArguments = null !== $r && $r->getNumberOfParameters() > 0;
+            unset($r);
+        }
+
         $monologProcessorId = 'monolog.processor.psr_log_message';
+        $monologProcessorArguments = [];
         $processorId = 'bizkit_loggable_command.processor.psr_log_message';
+
+        $processorOptions = $this->processPsr3Messages;
+        unset($processorOptions['enabled']);
+
+        if ($processorOptions) {
+            if (!$hasConstructorArguments) {
+                throw new RuntimeException('Monolog 1.26 or higher is required for the "date_format" and "remove_used_context_fields" options to be used.');
+            }
+            $monologProcessorArguments = [
+                $processorOptions['date_format'] ?? null,
+                $processorOptions['remove_used_context_fields'] ?? false,
+            ];
+            $monologProcessorId .= '.'.ContainerBuilder::hash($monologProcessorArguments);
+        }
 
         if ($container->hasDefinition($monologProcessorId)) {
             $container->setAlias($processorId, $monologProcessorId)
@@ -163,6 +186,7 @@ final class BizkitLoggableCommandExtension extends ConfigurableExtension impleme
         } else {
             $processor = new Definition(PsrLogMessageProcessor::class);
             $processor->setPublic(false);
+            $processor->setArguments($monologProcessorArguments);
             $container->setDefinition($processorId, $processor);
         }
     }

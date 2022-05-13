@@ -86,7 +86,15 @@ handler.
             enable_annotations:   false
 
         # Configuration option used by both handlers.
-        process_psr_3_messages: true
+        process_psr_3_messages:
+
+            # Examples:
+            - false
+            - { enabled: false }
+            - { date_format: Y-m-d, remove_used_context_fields: true }
+            enabled:              true
+            date_format:          ~
+            remove_used_context_fields: ~
     ```
 
 1. Enable the bundle in `config/bundles.php` by adding it to the array:
