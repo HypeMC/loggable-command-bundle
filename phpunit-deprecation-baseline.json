@@ -3,5 +3,80 @@
         "location": "Bizkit\\LoggableCommandBundle\\Tests\\BizkitLoggableCommandBundleTest::testCompilerPassIsRegisteredWithCorrectPriority",
         "message": "The Symfony\\Bundle\\MonologBundle\\DependencyInjection\\Compiler\\DebugHandlerPass class is deprecated since version 2.12 and will be removed in 4.0. Use AddDebugLogProcessorPass in FrameworkBundle instead.",
         "count": 1
+    },
+    {
+        "location": "Bizkit\\LoggableCommandBundle\\Tests\\DependencyInjection\\BizkitLoggableCommandExtensionTest::testAttributeConfigurationProviderIsNotRemovedWhenPHP8",
+        "message": "Function libxml_disable_entity_loader() is deprecated",
+        "count": 4
+    },
+    {
+        "location": "Bizkit\\LoggableCommandBundle\\Tests\\DependencyInjection\\BizkitLoggableCommandExtensionTest::testAnnotationConfigurationProviderIsRemovedWhenDisabled",
+        "message": "Function libxml_disable_entity_loader() is deprecated",
+        "count": 4
+    },
+    {
+        "location": "Bizkit\\LoggableCommandBundle\\Tests\\DependencyInjection\\BizkitLoggableCommandExtensionTest::testAnnotationConfigurationProviderIsNotRemovedWhenEnabled",
+        "message": "Function libxml_disable_entity_loader() is deprecated",
+        "count": 4
+    },
+    {
+        "location": "Bizkit\\LoggableCommandBundle\\Tests\\DependencyInjection\\BizkitLoggableCommandExtensionTest::testExceptionIsThrownWhenAnnotationConfigurationProviderIsEnabledAndAnnotationsAreNotInstalled",
+        "message": "Function libxml_disable_entity_loader() is deprecated",
+        "count": 4
+    },
+    {
+        "location": "Bizkit\\LoggableCommandBundle\\Tests\\DependencyInjection\\BizkitLoggableCommandExtensionTest::testChannelNameParameterIsSet",
+        "message": "Function libxml_disable_entity_loader() is deprecated",
+        "count": 4
+    },
+    {
+        "location": "Bizkit\\LoggableCommandBundle\\Tests\\DependencyInjection\\BizkitLoggableCommandExtensionTest::testArgumentsAreReplacedAsExpected",
+        "message": "Function libxml_disable_entity_loader() is deprecated",
+        "count": 4
+    },
+    {
+        "location": "Bizkit\\LoggableCommandBundle\\Tests\\DependencyInjection\\BizkitLoggableCommandExtensionTest::testAutoconfigurationIsRegistered",
+        "message": "Function libxml_disable_entity_loader() is deprecated",
+        "count": 4
+    },
+    {
+        "location": "Bizkit\\LoggableCommandBundle\\Tests\\DependencyInjection\\BizkitLoggableCommandExtensionTest::testFormatterAliasesAreNotRegisteredWhenFormattersAreNotConfigured",
+        "message": "Function libxml_disable_entity_loader() is deprecated",
+        "count": 4
+    },
+    {
+        "location": "Bizkit\\LoggableCommandBundle\\Tests\\DependencyInjection\\BizkitLoggableCommandExtensionTest::testFormatterAliasesAreRegisteredWhenFormattersAreConfigured",
+        "message": "Function libxml_disable_entity_loader() is deprecated",
+        "count": 4
+    },
+    {
+        "location": "Bizkit\\LoggableCommandBundle\\Tests\\DependencyInjection\\BizkitLoggableCommandExtensionTest::testConfiguratorIsSetToLoggableOutputServices",
+        "message": "Function libxml_disable_entity_loader() is deprecated",
+        "count": 4
+    },
+    {
+        "location": "Bizkit\\LoggableCommandBundle\\Tests\\DependencyInjection\\BizkitLoggableCommandExtensionTest::testPsrLogMessageProcessorIsNotRegisteredWhenFalse",
+        "message": "Function libxml_disable_entity_loader() is deprecated",
+        "count": 4
+    },
+    {
+        "location": "Bizkit\\LoggableCommandBundle\\Tests\\DependencyInjection\\BizkitLoggableCommandExtensionTest::testPsrLogMessageProcessorIsRegisteredWhenTrueAndMonologServiceDoesNotExist",
+        "message": "Function libxml_disable_entity_loader() is deprecated",
+        "count": 4
+    },
+    {
+        "location": "Bizkit\\LoggableCommandBundle\\Tests\\DependencyInjection\\BizkitLoggableCommandExtensionTest::testPsrLogMessageProcessorIsAliasedWhenTrueAndMonologServiceExists",
+        "message": "Function libxml_disable_entity_loader() is deprecated",
+        "count": 4
+    },
+    {
+        "location": "Bizkit\\LoggableCommandBundle\\Tests\\DependencyInjection\\BizkitLoggableCommandExtensionTest::testExceptionIsThrownWhenPsrLogMessageProcessorDoesNotHaveConstructorArguments",
+        "message": "Function libxml_disable_entity_loader() is deprecated",
+        "count": 4
+    },
+    {
+        "location": "Bizkit\\LoggableCommandBundle\\Tests\\FilenameProvider\\DefaultFilenameProviderTest::testNameFromCommandName",
+        "message": "The \"Symfony\\Component\\Console\\Command\\Command::$defaultName\" property is considered final. You should not override it in \"Bizkit\\LoggableCommandBundle\\Tests\\FilenameProvider\\Fixtures\\DummyLoggableCommand\".",
+        "count": 1
     }
 ]
