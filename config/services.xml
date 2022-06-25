@@ -8,16 +8,20 @@
         <defaults public="false" />
 
         <service id="Bizkit\LoggableCommandBundle\Handler\ConsoleHandler">
-            <argument>null</argument>
-            <argument /> <!-- bubble -->
-            <argument /> <!-- verbosity level map -->
-            <argument /> <!-- console formatter options -->
-            <call method="pushProcessor">
-                <argument type="service" id="bizkit_loggable_command.processor.psr_log_message" on-invalid="ignore" />
-            </call>
-            <call method="setFormatter">
-                <argument type="service" id="bizkit_loggable_command.formatter.console" on-invalid="ignore" />
-            </call>
+            <argument type="service">
+                <service class="Symfony\Bridge\Monolog\Handler\ConsoleHandler">
+                    <argument>null</argument>
+                    <argument /> <!-- bubble -->
+                    <argument /> <!-- verbosity level map -->
+                    <argument /> <!-- console formatter options -->
+                    <call method="pushProcessor">
+                        <argument type="service" id="bizkit_loggable_command.processor.psr_log_message" on-invalid="ignore" />
+                    </call>
+                    <call method="setFormatter">
+                        <argument type="service" id="bizkit_loggable_command.formatter.console" on-invalid="ignore" />
+                    </call>
+                </service>
+            </argument>
             <tag name="kernel.event_subscriber" />
         </service>
 

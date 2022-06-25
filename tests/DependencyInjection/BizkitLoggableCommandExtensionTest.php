@@ -178,6 +178,12 @@ final class BizkitLoggableCommandExtensionTest extends TestCase
 
         $definition = $container->getDefinition(ConsoleHandler::class);
 
+        $this->assertTrue($definition->hasMethodCall('setStdErrThreshold'));
+        $methodCalls = array_column($definition->getMethodCalls(), 1, 0);
+        $this->assertSame([Logger::CRITICAL], $methodCalls['setStdErrThreshold']);
+
+        $definition = $container->getDefinition((string) $definition->getArgument(0));
+
         $this->assertFalse($definition->getArgument(1));
 
         $this->assertSame([
@@ -191,10 +197,6 @@ final class BizkitLoggableCommandExtensionTest extends TestCase
         $this->assertSame([
             'format' => "[%%datetime%%] %%start_tag%%%%level_name%%%%end_tag%% %%message%%\n",
         ], $definition->getArgument(3));
-
-        $this->assertTrue($definition->hasMethodCall('setStdErrThreshold'));
-        $methodCalls = array_column($definition->getMethodCalls(), 1, 0);
-        $this->assertSame([Logger::CRITICAL], $methodCalls['setStdErrThreshold']);
 
         $argument = $container->getDefinition(DefaultConfigurationProvider::class)->getArgument(0);
         $this->assertIsArray($argument);

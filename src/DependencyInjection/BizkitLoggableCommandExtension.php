@@ -90,12 +90,15 @@ final class BizkitLoggableCommandExtension extends ConfigurableExtension impleme
         ;
 
         $stdErrThreshold = Logger::toMonologLevel($mergedConfig['console_handler_options']['stderr_threshold']);
-        $container
+        $consoleHandler = $container
             ->getDefinition(ConsoleHandler::class)
+            ->addMethodCall('setStdErrThreshold', [$stdErrThreshold])
+        ;
+        $container
+            ->getDefinition((string) $consoleHandler->getArgument(0))
             ->replaceArgument(1, $mergedConfig['console_handler_options']['bubble'])
             ->replaceArgument(2, $mergedConfig['console_handler_options']['verbosity_levels'])
             ->replaceArgument(3, $mergedConfig['console_handler_options']['console_formatter_options'])
-            ->addMethodCall('setStdErrThreshold', [$stdErrThreshold])
         ;
 
         if (null !== $formatter = $mergedConfig['console_handler_options']['formatter']) {
