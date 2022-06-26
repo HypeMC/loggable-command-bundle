@@ -7,11 +7,6 @@ parameters:
         - phpstan-autoload.php
     ignoreErrors:
         -
-            message: '#^Call to an undefined method ReflectionClass\:\:getAttributes\(\)\.$#'
-            count: 1
-            path: src/ConfigurationProvider/AttributeConfigurationProvider.php
-
-        -
             message: '#^Call to an undefined method Symfony\\Component\\Config\\Definition\\Builder\\NodeDefinition\:\:addDefaultsIfNotSet\(\)\.$#'
             count: 1
             path: src/DependencyInjection/Configuration.php
@@ -30,3 +25,13 @@ parameters:
             message: '#^Call to an undefined method Monolog\\Handler\\HandlerInterface\:\:setFormatter\(\)\.$#'
             count: 1
             path: src/HandlerFactory/AbstractHandlerFactory.php
+
+        -
+            message: '#^Parameter \#1 \$record of method Symfony\\Bridge\\Monolog\\Handler\\ConsoleHandler\:\:handle\(\) expects Monolog\\LogRecord, array\<string, array\|DateTimeImmutable\|int\|string\> given\.$#'
+            count: 1
+            path: src/Handler/ConsoleHandler.php
+
+        -
+            message: '#^Parameter \#1 \$record of method Symfony\\Bridge\\Monolog\\Handler\\ConsoleHandler\:\:isHandling\(\) expects Monolog\\LogRecord, array\<string, int\> given\.$#'
+            count: 1
+            path: src/Handler/ConsoleHandler.php
