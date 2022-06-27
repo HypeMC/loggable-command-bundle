@@ -196,15 +196,15 @@ final class BizkitLoggableCommandExtensionTest extends TestCase
         $methodCalls = array_column($definition->getMethodCalls(), 1, 0);
         $this->assertSame([Logger::CRITICAL], $methodCalls['setStdErrThreshold']);
 
-        $definition = $container->getDefinition(DefaultConfigurationProvider::class)->getArgument(0);
-        $this->assertIsArray($definition);
-        $this->assertArrayHasKey('path', $definition);
-        $this->assertArrayHasKey('level', $definition);
-        $this->assertArrayHasKey('bubble', $definition);
+        $argument = $container->getDefinition(DefaultConfigurationProvider::class)->getArgument(0);
+        $this->assertIsArray($argument);
+        $this->assertArrayHasKey('path', $argument);
+        $this->assertArrayHasKey('level', $argument);
+        $this->assertArrayHasKey('bubble', $argument);
 
-        $definition = $container->getDefinition(LoggableOutputConfigurator::class)->getArgument(2);
-        $this->assertInstanceOf(Reference::class, $definition);
-        $this->assertSame('monolog.logger.foo_channel', (string) $definition);
+        $argument = $container->getDefinition(LoggableOutputConfigurator::class)->getArgument(2);
+        $this->assertInstanceOf(Reference::class, $argument);
+        $this->assertSame('monolog.logger.foo_channel', (string) $argument);
     }
 
     public function testAutoconfigurationIsRegistered(): void
@@ -277,10 +277,10 @@ final class BizkitLoggableCommandExtensionTest extends TestCase
         $loggableCommandExtension->load([], $container);
         $loggableCommandExtension->process($container);
 
-        $definition = $container->getDefinition(DummyLoggableOutput::class)->getConfigurator();
-        $this->assertIsArray($definition);
-        $this->assertArrayHasKey(0, $definition);
-        $this->assertSame(LoggableOutputConfigurator::class, (string) $definition[0]);
+        $configurator = $container->getDefinition(DummyLoggableOutput::class)->getConfigurator();
+        $this->assertIsArray($configurator);
+        $this->assertArrayHasKey(0, $configurator);
+        $this->assertSame(LoggableOutputConfigurator::class, (string) $configurator[0]);
     }
 
     public function testPsrLogMessageProcessorIsNotRegisteredWhenFalse(): void
