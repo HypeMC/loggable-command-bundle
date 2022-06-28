@@ -7,10 +7,10 @@ namespace Bizkit\LoggableCommandBundle\Tests\ConfigurationProvider\Fixtures;
 use Bizkit\LoggableCommandBundle\ConfigurationProvider\Attribute\LoggableOutput;
 use Bizkit\LoggableCommandBundle\LoggableOutput\LoggableOutputInterface;
 use Bizkit\LoggableCommandBundle\LoggableOutput\LoggableOutputTrait;
-use Monolog\Logger;
+use Psr\Log\LogLevel;
 
 /**
- * @LoggableOutput(filename="annotation-test", level=Logger::CRITICAL, maxFiles=4)
+ * @LoggableOutput(filename="annotation-test", level=LogLevel::CRITICAL, maxFiles=4)
  */
 class DummyLoggableOutputWithAnnotation implements LoggableOutputInterface
 {

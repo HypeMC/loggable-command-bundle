@@ -16,8 +16,10 @@ use Bizkit\LoggableCommandBundle\Tests\DependencyInjection\Fixtures\DummyHandler
 use Bizkit\LoggableCommandBundle\Tests\DependencyInjection\Fixtures\DummyLoggableOutput;
 use Bizkit\LoggableCommandBundle\Tests\TestCase;
 use Doctrine\Common\Annotations\Annotation;
+use Monolog\Level;
 use Monolog\Logger;
 use Monolog\Processor\PsrLogMessageProcessor;
+use Psr\Log\LogLevel;
 use Symfony\Bundle\MonologBundle\DependencyInjection\MonologExtension;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\DependencyInjection\Compiler\ResolveInstanceofConditionalsPass;
@@ -180,19 +182,25 @@ final class BizkitLoggableCommandExtensionTest extends TestCase
 
         $this->assertTrue($definition->hasMethodCall('setStdErrThreshold'));
         $methodCalls = array_column($definition->getMethodCalls(), 1, 0);
-        $this->assertSame([Logger::CRITICAL], $methodCalls['setStdErrThreshold']);
+        $this->assertSame([Logger::toMonologLevel(LogLevel::CRITICAL)], $methodCalls['setStdErrThreshold']);
 
         $definition = $container->getDefinition((string) $definition->getArgument(0));
 
         $this->assertFalse($definition->getArgument(1));
 
-        $this->assertSame([
-            OutputInterface::VERBOSITY_NORMAL => Logger::INFO,
-            OutputInterface::VERBOSITY_VERBOSE => Logger::INFO,
-            OutputInterface::VERBOSITY_QUIET => Logger::ERROR,
-            OutputInterface::VERBOSITY_VERY_VERBOSE => Logger::INFO,
-            OutputInterface::VERBOSITY_DEBUG => Logger::DEBUG,
-        ], $definition->getArgument(2));
+        $expectedVerbosityLevels = array_map(static function (string $level): int {
+            /** @var int|Level $level */
+            $level = Logger::toMonologLevel($level);
+
+            return $level instanceof Level ? $level->value : $level;
+        }, [
+            OutputInterface::VERBOSITY_NORMAL => LogLevel::INFO,
+            OutputInterface::VERBOSITY_VERBOSE => LogLevel::INFO,
+            OutputInterface::VERBOSITY_QUIET => LogLevel::ERROR,
+            OutputInterface::VERBOSITY_VERY_VERBOSE => LogLevel::INFO,
+            OutputInterface::VERBOSITY_DEBUG => LogLevel::DEBUG,
+        ]);
+        $this->assertSame($expectedVerbosityLevels, $definition->getArgument(2));
 
         $this->assertSame([
             'format' => "[%%datetime%%] %%start_tag%%%%level_name%%%%end_tag%% %%message%%\n",
@@ -207,6 +215,31 @@ final class BizkitLoggableCommandExtensionTest extends TestCase
         $argument = $container->getDefinition(LoggableOutputConfigurator::class)->getArgument(2);
         $this->assertInstanceOf(Reference::class, $argument);
         $this->assertSame('monolog.logger.foo_channel', (string) $argument);
+    }
+
+    public function testConsoleHandlerCanBeInstantiated(): void
+    {
+        $container = new ContainerBuilder();
+        $container->setParameter('kernel.logs_dir', '/var/log');
+        $container->registerExtension(new MonologExtension());
+        $container->registerExtension($loggableCommandExtension = new BizkitLoggableCommandExtension());
+
+        $loggableCommandExtension->load([[
+            'channel_name' => 'foo_channel',
+            'console_handler_options' => [
+                'bubble' => false,
+                'stderr_threshold' => 'CRITICAL',
+                'verbosity_levels' => [
+                    'VERBOSITY_NORMAL' => 'INFO',
+                    'VERBOSITY_VERBOSE' => 'INFO',
+                ],
+            ],
+        ]], $container);
+
+        $container->getDefinition(ConsoleHandler::class)->setPublic(true);
+        $container->compile();
+
+        $this->assertInstanceOf(ConsoleHandler::class, $container->get(ConsoleHandler::class));
     }
 
     public function testAutoconfigurationIsRegistered(): void

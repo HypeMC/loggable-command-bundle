@@ -15,7 +15,7 @@ use Bizkit\LoggableCommandBundle\Tests\TestCase;
 use Doctrine\Common\Annotations\Annotation;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\DocParser;
-use Monolog\Logger;
+use Psr\Log\LogLevel;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ParameterBag\ContainerBag;
 use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
@@ -34,7 +34,7 @@ final class AnnotationConfigurationProviderTest extends TestCase
 
     public function testProviderReturnsExpectedConfigWhenAnnotationIsFound(): void
     {
-        $handlerOptions = ['filename' => 'annotation-test', 'level' => Logger::CRITICAL, 'max_files' => 4];
+        $handlerOptions = ['filename' => 'annotation-test', 'level' => LogLevel::CRITICAL, 'max_files' => 4];
 
         $provider = $this->createConfigurationProvider(
             $this->createContainerBagWithResolveValueMethodCalled($handlerOptions)
@@ -48,7 +48,7 @@ final class AnnotationConfigurationProviderTest extends TestCase
 
     public function testProviderReturnsExpectedConfigWhenParentAndChildAnnotationsAreFound(): void
     {
-        $handlerOptions = ['filename' => 'child-annotation-test', 'level' => Logger::CRITICAL, 'max_files' => 4];
+        $handlerOptions = ['filename' => 'child-annotation-test', 'level' => LogLevel::CRITICAL, 'max_files' => 4];
 
         $provider = $this->createConfigurationProvider(
             $this->createContainerBagWithResolveValueMethodCalled($handlerOptions)
@@ -62,7 +62,7 @@ final class AnnotationConfigurationProviderTest extends TestCase
 
     public function testProviderReturnsExpectedConfigWhenParentAnnotationIsFound(): void
     {
-        $handlerOptions = ['filename' => 'annotation-test', 'level' => Logger::CRITICAL, 'max_files' => 4];
+        $handlerOptions = ['filename' => 'annotation-test', 'level' => LogLevel::CRITICAL, 'max_files' => 4];
 
         $provider = $this->createConfigurationProvider(
             $this->createContainerBagWithResolveValueMethodCalled($handlerOptions)

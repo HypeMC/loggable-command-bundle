@@ -9,7 +9,7 @@ use Bizkit\LoggableCommandBundle\ConfigurationProvider\MergedConfigurationProvid
 use Bizkit\LoggableCommandBundle\LoggableOutput\LoggableOutputInterface;
 use Bizkit\LoggableCommandBundle\Tests\ConfigurationProvider\Fixtures\DummyLoggableOutput;
 use Bizkit\LoggableCommandBundle\Tests\TestCase;
-use Monolog\Logger;
+use Psr\Log\LogLevel;
 
 /**
  * @covers \Bizkit\LoggableCommandBundle\ConfigurationProvider\MergedConfigurationProvider
@@ -22,18 +22,18 @@ final class MergedConfigurationProviderTest extends TestCase
 
         $provider = $this->createConfigurationProvider(
             $loggableOutput,
-            ['filename' => 'annotation-test', 'level' => Logger::CRITICAL, 'max_files' => 4, 'extra_options' => [
+            ['filename' => 'annotation-test', 'level' => LogLevel::CRITICAL, 'max_files' => 4, 'extra_options' => [
                 'foo' => 'one',
                 'bar' => 'two',
             ]],
-            ['filename' => 'attribute-test', 'level' => Logger::EMERGENCY, 'bubble' => true, 'extra_options' => [
+            ['filename' => 'attribute-test', 'level' => LogLevel::EMERGENCY, 'bubble' => true, 'extra_options' => [
                 'foo' => 'new one',
                 'baz' => 'three',
             ]]
         );
 
         $this->assertSame(
-            ['filename' => 'annotation-test', 'level' => Logger::CRITICAL, 'max_files' => 4, 'bubble' => true, 'extra_options' => [
+            ['filename' => 'annotation-test', 'level' => LogLevel::CRITICAL, 'max_files' => 4, 'bubble' => true, 'extra_options' => [
                 'foo' => 'one',
                 'bar' => 'two',
                 'baz' => 'three',

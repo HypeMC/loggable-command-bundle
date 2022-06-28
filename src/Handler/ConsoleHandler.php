@@ -9,7 +9,10 @@ use Monolog\Handler\AbstractHandler;
 use Monolog\Handler\FormattableHandlerInterface;
 use Monolog\Handler\HandlerInterface;
 use Monolog\Handler\ProcessableHandlerInterface;
+use Monolog\Level;
 use Monolog\Logger;
+use Monolog\LogRecord;
+use Psr\Log\LogLevel;
 use Symfony\Bridge\Monolog\Handler\ConsoleHandler as BaseConsoleHandler;
 use Symfony\Component\Console\Event\ConsoleCommandEvent;
 use Symfony\Component\Console\Event\ConsoleTerminateEvent;
@@ -17,12 +20,52 @@ use Symfony\Component\Console\Output\ConsoleOutputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
+if (Logger::API >= 3) {
+    trait CompatibilityHandlerTrait
+    {
+        public function handle(LogRecord $record): bool
+        {
+            return $this->doHandle($record);
+        }
+
+        public function isHandling(LogRecord $record): bool
+        {
+            return $this->doIsHandling($record);
+        }
+
+        public function getLevel(): Level
+        {
+            return $this->doGetLevel();
+        }
+    }
+} else {
+    trait CompatibilityHandlerTrait
+    {
+        public function handle(array $record): bool
+        {
+            return $this->doHandle($record);
+        }
+
+        public function isHandling(array $record): bool
+        {
+            return $this->doIsHandling($record);
+        }
+
+        public function getLevel(): int
+        {
+            return $this->doGetLevel();
+        }
+    }
+}
+
 /**
  * Unlike Symfony's ConsoleHandler which sends everything to stderr if available,
  * this one sends to stdout or stderr depending on the {@see ConsoleHandler::$stdErrThreshold} setting.
  */
 final class ConsoleHandler extends AbstractHandler implements ProcessableHandlerInterface, FormattableHandlerInterface, EventSubscriberInterface
 {
+    use CompatibilityHandlerTrait;
+
     /**
      * @var BaseConsoleHandler
      */
@@ -31,7 +74,7 @@ final class ConsoleHandler extends AbstractHandler implements ProcessableHandler
     /**
      * @var int
      */
-    private $stdErrThreshold = Logger::WARNING;
+    private $stdErrThreshold;
 
     /**
      * @var OutputInterface|null
@@ -46,11 +89,15 @@ final class ConsoleHandler extends AbstractHandler implements ProcessableHandler
     public function __construct(BaseConsoleHandler $innerHandler)
     {
         $this->innerHandler = $innerHandler;
+        $this->setStdErrThreshold(Logger::toMonologLevel(LogLevel::WARNING));
     }
 
-    public function setStdErrThreshold(int $stdErrThreshold): void
+    /**
+     * @param int|Level $stdErrThreshold
+     */
+    public function setStdErrThreshold($stdErrThreshold): void
     {
-        $this->stdErrThreshold = $stdErrThreshold;
+        $this->stdErrThreshold = $stdErrThreshold instanceof Level ? $stdErrThreshold->value : $stdErrThreshold;
     }
 
     public function setStandardOutput(OutputInterface $standardOutput): void
@@ -96,7 +143,7 @@ final class ConsoleHandler extends AbstractHandler implements ProcessableHandler
         $this->close();
     }
 
-    public function handle(array $record): bool
+    private function doHandle($record): bool
     {
         $this->innerHandler->setOutput(
             $record['level'] < $this->stdErrThreshold ? $this->standardOutput : $this->errorOutput
@@ -110,7 +157,7 @@ final class ConsoleHandler extends AbstractHandler implements ProcessableHandler
         return BaseConsoleHandler::getSubscribedEvents();
     }
 
-    public function isHandling(array $record): bool
+    private function doIsHandling($record): bool
     {
         return $this->innerHandler->isHandling($record);
     }
@@ -156,7 +203,7 @@ final class ConsoleHandler extends AbstractHandler implements ProcessableHandler
         return $this;
     }
 
-    public function getLevel(): int
+    private function doGetLevel()
     {
         return $this->innerHandler->getLevel();
     }

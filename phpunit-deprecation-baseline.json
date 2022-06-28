@@ -35,6 +35,11 @@
         "count": 4
     },
     {
+        "location": "Bizkit\\LoggableCommandBundle\\Tests\\DependencyInjection\\BizkitLoggableCommandExtensionTest::testConsoleHandlerCanBeInstantiated",
+        "message": "Function libxml_disable_entity_loader() is deprecated",
+        "count": 8
+    },
+    {
         "location": "Bizkit\\LoggableCommandBundle\\Tests\\DependencyInjection\\BizkitLoggableCommandExtensionTest::testAutoconfigurationIsRegistered",
         "message": "Function libxml_disable_entity_loader() is deprecated",
         "count": 4

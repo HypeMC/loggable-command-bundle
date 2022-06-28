@@ -8,8 +8,10 @@ use Bizkit\LoggableCommandBundle\Handler\ConsoleHandler;
 use Bizkit\LoggableCommandBundle\Tests\TestCase;
 use Monolog\Formatter\FormatterInterface;
 use Monolog\Logger;
+use Monolog\LogRecord;
 use Monolog\Processor\ProcessorInterface;
 use Monolog\ResettableInterface;
+use Psr\Log\LogLevel;
 use Symfony\Bridge\Monolog\Handler\ConsoleHandler as BaseConsoleHandler;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Event\ConsoleCommandEvent;
@@ -20,15 +22,13 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * @covers \Bizkit\LoggableCommandBundle\Handler\ConsoleHandler
- *
- * @phpstan-import-type Level from \Monolog\Logger
  */
 final class ConsoleHandlerTest extends TestCase
 {
     public function testHandlerIsDecoratedAsExpected(): void
     {
         $innerConsoleHandler = new BaseConsoleHandler(null, true, [
-            OutputInterface::VERBOSITY_NORMAL => Logger::WARNING,
+            OutputInterface::VERBOSITY_NORMAL => LogLevel::WARNING,
         ]);
         $consoleHandler = new ConsoleHandler($innerConsoleHandler);
 
@@ -37,20 +37,12 @@ final class ConsoleHandlerTest extends TestCase
         $consoleHandler->setOutput($output);
 
         $output->expects($this->once())->method('write');
-        $consoleHandler->handleBatch([
-            [
-                'datetime' => new \DateTimeImmutable('2021-01-31 13:50:02'),
-                'channel' => 'foo',
-                'message' => 'Lorem ipsum',
-                'level' => Logger::WARNING,
-                'level_name' => Logger::getLevelName(Logger::WARNING),
-            ],
-        ]);
+        $consoleHandler->handleBatch([$this->getRecord()]);
 
-        $this->assertFalse($innerConsoleHandler->isHandling(['level' => Logger::DEBUG]));
-        $this->assertFalse($consoleHandler->isHandling(['level' => Logger::DEBUG]));
-        $this->assertTrue($innerConsoleHandler->isHandling(['level' => Logger::ERROR]));
-        $this->assertTrue($consoleHandler->isHandling(['level' => Logger::ERROR]));
+        $this->assertFalse($innerConsoleHandler->isHandling($this->getRecord(LogLevel::DEBUG)));
+        $this->assertFalse($consoleHandler->isHandling($this->getRecord(LogLevel::DEBUG)));
+        $this->assertTrue($innerConsoleHandler->isHandling($this->getRecord(LogLevel::ERROR)));
+        $this->assertTrue($consoleHandler->isHandling($this->getRecord(LogLevel::ERROR)));
 
         $consoleHandler->setBubble(false);
         $this->assertFalse($innerConsoleHandler->getBubble());
@@ -59,18 +51,18 @@ final class ConsoleHandlerTest extends TestCase
         $this->assertTrue($innerConsoleHandler->getBubble());
         $this->assertTrue($consoleHandler->getBubble());
 
-        $consoleHandler->setLevel(Logger::NOTICE);
-        $this->assertSame(Logger::NOTICE, $innerConsoleHandler->getLevel());
-        $this->assertSame(Logger::NOTICE, $consoleHandler->getLevel());
-        $consoleHandler->setLevel(Logger::WARNING);
-        $this->assertSame(Logger::WARNING, $innerConsoleHandler->getLevel());
-        $this->assertSame(Logger::WARNING, $consoleHandler->getLevel());
+        $consoleHandler->setLevel(LogLevel::NOTICE);
+        $this->assertSame(Logger::toMonologLevel(LogLevel::NOTICE), $innerConsoleHandler->getLevel());
+        $this->assertSame(Logger::toMonologLevel(LogLevel::NOTICE), $consoleHandler->getLevel());
+        $consoleHandler->setLevel(LogLevel::WARNING);
+        $this->assertSame(Logger::toMonologLevel(LogLevel::WARNING), $innerConsoleHandler->getLevel());
+        $this->assertSame(Logger::toMonologLevel(LogLevel::WARNING), $consoleHandler->getLevel());
 
         $consoleHandler->onTerminate(new ConsoleTerminateEvent(
             new Command(), $this->createMock(InputInterface::class), $this->createMock(OutputInterface::class), 0
         ));
-        $this->assertFalse($innerConsoleHandler->isHandling(['level' => Logger::ERROR]));
-        $this->assertFalse($consoleHandler->isHandling(['level' => Logger::ERROR]));
+        $this->assertFalse($innerConsoleHandler->isHandling($this->getRecord(LogLevel::ERROR)));
+        $this->assertFalse($consoleHandler->isHandling($this->getRecord(LogLevel::ERROR)));
 
         $formatter = $this->createMock(FormatterInterface::class);
         $consoleHandler->setFormatter($formatter);
@@ -95,9 +87,10 @@ final class ConsoleHandlerTest extends TestCase
     /**
      * @dataProvider outputData
      *
-     * @phpstan-param Level $level
+     * @param LogLevel::* $stdErrThreshold
+     * @param LogLevel::* $level
      */
-    public function testCorrectOutputIsUsed(string $expectedOutput, string $silentOutput, int $stdErrThreshold, int $level): void
+    public function testCorrectOutputIsUsed(string $expectedOutput, string $silentOutput, string $stdErrThreshold, string $level): void
     {
         $errorOutput = $this->createMock(OutputInterface::class);
         $errorOutput->method('getVerbosity')->willReturn(OutputInterface::VERBOSITY_DEBUG);
@@ -120,17 +113,9 @@ final class ConsoleHandlerTest extends TestCase
             ->method('write')
         ;
 
-        $consoleHandler->setStdErrThreshold($stdErrThreshold);
+        $consoleHandler->setStdErrThreshold(Logger::toMonologLevel($stdErrThreshold));
 
-        $consoleHandler->handle([
-            'datetime' => new \DateTimeImmutable('2021-01-31 13:50:02'),
-            'channel' => 'foo',
-            'message' => 'Lorem ipsum',
-            'level' => $level,
-            'level_name' => Logger::getLevelName($level),
-            'context' => [],
-            'extra' => [],
-        ]);
+        $consoleHandler->handle($this->getRecord($level));
     }
 
     public function outputData(): iterable
@@ -138,33 +123,59 @@ final class ConsoleHandlerTest extends TestCase
         yield 'NOTICE with threshold level WARNING' => [
             'standardOutput',
             'errorOutput',
-            Logger::WARNING,
-            Logger::NOTICE,
+            LogLevel::WARNING,
+            LogLevel::NOTICE,
         ];
         yield 'WARNING with threshold level WARNING' => [
             'errorOutput',
             'standardOutput',
-            Logger::WARNING,
-            Logger::WARNING,
+            LogLevel::WARNING,
+            LogLevel::WARNING,
         ];
         yield 'ERROR with threshold level WARNING' => [
             'errorOutput',
             'standardOutput',
-            Logger::WARNING,
-            Logger::WARNING,
+            LogLevel::WARNING,
+            LogLevel::WARNING,
         ];
         yield 'WARNING with threshold level ERROR' => [
             'standardOutput',
             'errorOutput',
-            Logger::ERROR,
-            Logger::WARNING,
+            LogLevel::ERROR,
+            LogLevel::WARNING,
         ];
         yield 'CRITICAL with threshold level ERROR' => [
             'errorOutput',
             'standardOutput',
-            Logger::ERROR,
-            Logger::CRITICAL,
+            LogLevel::ERROR,
+            LogLevel::CRITICAL,
         ];
+    }
+
+    /**
+     * @param LogLevel::* $level
+     *
+     * @return array|LogRecord
+     */
+    private function getRecord(string $level = LogLevel::WARNING)
+    {
+        $record = [
+            'datetime' => new \DateTimeImmutable('2021-01-31 13:50:02'),
+            'channel' => 'foo',
+            'message' => 'Lorem ipsum',
+            'level_name' => $level,
+            'context' => [],
+            'extra' => [],
+        ];
+
+        $record['level'] = Logger::toMonologLevel($record['level_name']);
+
+        if (class_exists(LogRecord::class)) {
+            unset($record['level_name']);
+            $record = new LogRecord(...$record);
+        }
+
+        return $record;
     }
 }
 

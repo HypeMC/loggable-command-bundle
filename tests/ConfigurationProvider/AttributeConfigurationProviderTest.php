@@ -12,7 +12,7 @@ use Bizkit\LoggableCommandBundle\Tests\ConfigurationProvider\Fixtures\DummyLogga
 use Bizkit\LoggableCommandBundle\Tests\ConfigurationProvider\Fixtures\DummyLoggableOutputWithAttribute;
 use Bizkit\LoggableCommandBundle\Tests\ConfigurationProvider\Fixtures\DummyLoggableOutputWithAttributeAndParam;
 use Bizkit\LoggableCommandBundle\Tests\TestCase;
-use Monolog\Logger;
+use Psr\Log\LogLevel;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ParameterBag\ContainerBag;
 use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
@@ -26,7 +26,7 @@ final class AttributeConfigurationProviderTest extends TestCase
 {
     public function testProviderReturnsExpectedConfigWhenAttributeIsFound(): void
     {
-        $handlerOptions = ['filename' => 'attribute-test', 'level' => Logger::EMERGENCY, 'bubble' => true];
+        $handlerOptions = ['filename' => 'attribute-test', 'level' => LogLevel::EMERGENCY, 'bubble' => true];
 
         $provider = $this->createConfigurationProvider(
             $this->createContainerBagWithResolveValueMethodCalled($handlerOptions)
@@ -40,7 +40,7 @@ final class AttributeConfigurationProviderTest extends TestCase
 
     public function testProviderReturnsExpectedConfigWhenParentAndChildAttributesAreFound(): void
     {
-        $handlerOptions = ['filename' => 'child-attribute-test', 'level' => Logger::EMERGENCY, 'bubble' => true];
+        $handlerOptions = ['filename' => 'child-attribute-test', 'level' => LogLevel::EMERGENCY, 'bubble' => true];
 
         $provider = $this->createConfigurationProvider(
             $this->createContainerBagWithResolveValueMethodCalled($handlerOptions)
@@ -54,7 +54,7 @@ final class AttributeConfigurationProviderTest extends TestCase
 
     public function testProviderReturnsExpectedConfigWhenParentAttributeIsFound(): void
     {
-        $handlerOptions = ['filename' => 'attribute-test', 'level' => Logger::EMERGENCY, 'bubble' => true];
+        $handlerOptions = ['filename' => 'attribute-test', 'level' => LogLevel::EMERGENCY, 'bubble' => true];
 
         $provider = $this->createConfigurationProvider(
             $this->createContainerBagWithResolveValueMethodCalled($handlerOptions)

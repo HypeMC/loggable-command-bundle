@@ -9,6 +9,7 @@ use Bizkit\LoggableCommandBundle\HandlerFactory\StreamHandlerFactory;
 use Bizkit\LoggableCommandBundle\Tests\TestCase;
 use Monolog\Handler\HandlerInterface;
 use Monolog\Logger;
+use Psr\Log\LogLevel;
 
 /**
  * @covers \Bizkit\LoggableCommandBundle\HandlerFactory\RotatingFileHandlerFactory
@@ -24,7 +25,7 @@ final class HandlerFactoriesTest extends TestCase
             'include_stacktraces' => false,
             'path' => $path = __DIR__.'/foo',
             'max_files' => $maxFiles = 3,
-            'level' => $level = Logger::EMERGENCY,
+            'level' => $level = Logger::toMonologLevel(LogLevel::EMERGENCY),
             'bubble' => $bubble = false,
             'file_permission' => $filePermission = 666,
             'use_locking' => $useLocking = true,
@@ -49,7 +50,7 @@ final class HandlerFactoriesTest extends TestCase
         $handler = $handlerFactory([
             'include_stacktraces' => false,
             'path' => $path = __DIR__.'/foo',
-            'level' => $level = Logger::EMERGENCY,
+            'level' => $level = Logger::toMonologLevel(LogLevel::EMERGENCY),
             'bubble' => $bubble = false,
             'file_permission' => $filePermission = 666,
             'use_locking' => $useLocking = true,

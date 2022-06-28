@@ -27,11 +27,11 @@ parameters:
             path: src/HandlerFactory/AbstractHandlerFactory.php
 
         -
-            message: '#^Parameter \#1 \$record of method Symfony\\Bridge\\Monolog\\Handler\\ConsoleHandler\:\:handle\(\) expects Monolog\\LogRecord, array\<string, array\|DateTimeImmutable\|int\|string\> given\.$#'
+            message: '#^Comparison operation "\>\=" between 3 and 3 is always true\.$#'
             count: 1
             path: src/Handler/ConsoleHandler.php
 
         -
-            message: '#^Parameter \#1 \$record of method Symfony\\Bridge\\Monolog\\Handler\\ConsoleHandler\:\:isHandling\(\) expects Monolog\\LogRecord, array\<string, int\> given\.$#'
+            message: '#^Else branch is unreachable because previous condition is always true\.$#'
             count: 1
             path: src/Handler/ConsoleHandler.php
