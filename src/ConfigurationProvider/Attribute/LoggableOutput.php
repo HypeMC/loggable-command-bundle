@@ -8,6 +8,7 @@ namespace Bizkit\LoggableCommandBundle\ConfigurationProvider\Attribute;
  * Annotation class for @LoggableOutput.
  *
  * @Annotation
+ *
  * @Target({"CLASS"})
  * @Attributes({
  *     @Attribute("filename", type="string"),
