@@ -5,8 +5,7 @@
 [![License](https://poser.pugx.org/bizkit/loggable-command-bundle/license)](https://packagist.org/packages/bizkit/loggable-command-bundle)
 [![Code Coverage](https://codecov.io/gh/HypeMC/loggable-command-bundle/branch/main/graph/badge.svg)](https://codecov.io/gh/HypeMC/loggable-command-bundle)
 
-Logs the output into a file by dynamically creating a dedicated Monolog file handler for each Symfony command or message
-handler.
+Symfony bundle which creates a dedicated Monolog log file for each command or message handler.
 
 ## Features
 

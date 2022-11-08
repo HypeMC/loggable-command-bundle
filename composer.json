@@ -1,6 +1,6 @@
 {
     "name": "bizkit/loggable-command-bundle",
-    "description": "Logs the output into a file by dynamically creating a dedicated Monolog file handler for each Symfony command or message handler.",
+    "description": "Symfony bundle which creates a dedicated Monolog log file for each command or message handler.",
     "type": "symfony-bundle",
     "keywords": [
         "log",
