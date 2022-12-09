@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Bizkit\LoggableCommandBundle\Tests\DependencyInjection;
 
-use Bizkit\LoggableCommandBundle\ConfigurationProvider\AnnotationConfigurationProvider;
 use Bizkit\LoggableCommandBundle\ConfigurationProvider\AttributeConfigurationProvider;
 use Bizkit\LoggableCommandBundle\ConfigurationProvider\DefaultConfigurationProvider;
 use Bizkit\LoggableCommandBundle\DependencyInjection\BizkitLoggableCommandExtension;
@@ -15,7 +14,6 @@ use Bizkit\LoggableCommandBundle\Tests\DependencyInjection\Fixtures\DummyFormatt
 use Bizkit\LoggableCommandBundle\Tests\DependencyInjection\Fixtures\DummyHandlerFactory;
 use Bizkit\LoggableCommandBundle\Tests\Fixtures\DummyLoggableOutput;
 use Bizkit\LoggableCommandBundle\Tests\TestCase;
-use Doctrine\Common\Annotations\Annotation;
 use Monolog\Level;
 use Monolog\Logger;
 use Monolog\Processor\PsrLogMessageProcessor;
@@ -24,7 +22,6 @@ use Symfony\Bundle\MonologBundle\DependencyInjection\MonologExtension;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\DependencyInjection\Compiler\ResolveInstanceofConditionalsPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Exception\LogicException;
 use Symfony\Component\DependencyInjection\Exception\RuntimeException;
 use Symfony\Component\DependencyInjection\Reference;
 
@@ -96,56 +93,6 @@ final class BizkitLoggableCommandExtensionTest extends TestCase
         $loggableCommandExtension->load([], $container);
 
         $this->assertTrue($container->hasDefinition(AttributeConfigurationProvider::class));
-    }
-
-    public function testAnnotationConfigurationProviderIsRemovedWhenDisabled(): void
-    {
-        $container = new ContainerBuilder();
-        $container->registerExtension($loggableCommandExtension = new BizkitLoggableCommandExtension());
-
-        $loggableCommandExtension->load([[
-            'file_handler_options' => [
-                'enable_annotations' => false,
-            ],
-        ]], $container);
-
-        $this->assertFalse($container->hasDefinition(AnnotationConfigurationProvider::class));
-    }
-
-    public function testAnnotationConfigurationProviderIsNotRemovedWhenEnabled(): void
-    {
-        if (!class_exists(Annotation::class)) {
-            $this->markTestSkipped('Doctrine Annotation library is required.');
-        }
-
-        $container = new ContainerBuilder();
-        $container->registerExtension($loggableCommandExtension = new BizkitLoggableCommandExtension());
-
-        $loggableCommandExtension->load([[
-            'file_handler_options' => [
-                'enable_annotations' => true,
-            ],
-        ]], $container);
-
-        $this->assertTrue($container->hasDefinition(AnnotationConfigurationProvider::class));
-    }
-
-    public function testExceptionIsThrownWhenAnnotationConfigurationProviderIsEnabledAndAnnotationsAreNotInstalled(): void
-    {
-        if (class_exists(Annotation::class)) {
-            $this->markTestSkipped('Doctrine Annotation library mustn\'t be installed.');
-        }
-
-        $container = new ContainerBuilder();
-        $container->registerExtension($loggableCommandExtension = new BizkitLoggableCommandExtension());
-
-        $this->expectException(LogicException::class);
-
-        $loggableCommandExtension->load([[
-            'file_handler_options' => [
-                'enable_annotations' => true,
-            ],
-        ]], $container);
     }
 
     public function testChannelNameParameterIsSet(): void

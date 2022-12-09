@@ -12,7 +12,6 @@ $finder = PhpCsFixer\Finder::create()
 return (new PhpCsFixer\Config())
     ->setUsingCache(true)
     ->setRules([
-        '@DoctrineAnnotation' => true,
         '@PSR12' => true,
         '@Symfony' => true,
         '@Symfony:risky' => true,
@@ -30,9 +29,6 @@ return (new PhpCsFixer\Config())
                 OrderedImportsFixer::IMPORT_TYPE_FUNCTION,
                 OrderedImportsFixer::IMPORT_TYPE_CLASS,
             ],
-        ],
-        'phpdoc_separation' => [
-            'groups' => [['Common\\*']],
         ],
         'pow_to_exponentiation' => true,
         'single_line_throw' => false,

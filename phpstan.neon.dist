@@ -35,3 +35,8 @@ parameters:
             message: '#^Else branch is unreachable because previous condition is always true\.$#'
             count: 1
             path: src/Handler/ConsoleHandler.php
+
+        -
+            message: '#^Parameter \#4 \$level of class Bizkit\\LoggableCommandBundle\\ConfigurationProvider\\Attribute\\LoggableOutput constructor expects int\|string\|null, true given\.$#'
+            count: 1
+            path: tests/ConfigurationProvider/Attribute/LoggableOutputTest.php

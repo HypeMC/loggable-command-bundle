@@ -128,19 +128,13 @@ jobs:
             -   name: Install PHPUnit Dependencies
                 run: vendor/bin/simple-phpunit install
 
-            -   name: Run PHPUnit with Doctrine Annotations
-                run: vendor/bin/simple-phpunit -v --coverage-text --coverage-clover=coverage-annotations.xml
-
-            -   name: Remove Doctrine Annotations
-                run: composer remove --dev doctrine/annotations
-
-            -   name: Run PHPUnit without Doctrine Annotations
-                run: vendor/bin/simple-phpunit -v --coverage-text --coverage-clover=coverage-no-annotations.xml
+            -   name: Run PHPUnit
+                run: vendor/bin/simple-phpunit -v --coverage-text --coverage-clover=coverage.xml
 
             -   name: Upload Coverage to Codecov
                 if: ${{ success() }}
                 uses: codecov/codecov-action@v4
                 with:
-                    files: coverage-annotations.xml,coverage-no-annotations.xml
+                    file: coverage.xml
                     flags: ${{ matrix.php }}
                     token: ${{ secrets.CODECOV_TOKEN }}

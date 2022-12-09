@@ -29,14 +29,7 @@
         "symfony/monolog-bundle": "^3.4"
     },
     "require-dev": {
-        "doctrine/annotations": "^1.10.4 || ^2",
         "symfony/phpunit-bridge": "^6.4.1"
-    },
-    "conflict": {
-        "doctrine/annotations": "<1.10.4"
-    },
-    "suggest": {
-        "doctrine/annotations": "For configuring services with the use of an annotation"
     },
     "autoload": {
         "psr-4": {

@@ -4,28 +4,6 @@ declare(strict_types=1);
 
 namespace Bizkit\LoggableCommandBundle\ConfigurationProvider\Attribute;
 
-use Doctrine\Common\Annotations\Annotation as Common;
-
-/**
- * Annotation class for @LoggableOutput.
- *
- * @Annotation
- *
- * @Common\Target({"CLASS"})
- * @Common\Attributes({
- *     @Common\Attribute("filename", type="string"),
- *     @Common\Attribute("path", type="string"),
- *     @Common\Attribute("type", type="string"),
- *     @Common\Attribute("bubble", type="bool"),
- *     @Common\Attribute("includeStacktraces", type="bool"),
- *     @Common\Attribute("filePermission", type="int"),
- *     @Common\Attribute("useLocking", type="bool"),
- *     @Common\Attribute("maxFiles", type="int"),
- *     @Common\Attribute("filenameFormat", type="string"),
- *     @Common\Attribute("dateFormat", type="string"),
- *     @Common\Attribute("extraOptions", type="array"),
- * })
- */
 #[\Attribute(\Attribute::TARGET_CLASS)]
 final class LoggableOutput
 {
@@ -38,7 +16,6 @@ final class LoggableOutput
      * @param string|int|null $level
      */
     public function __construct(
-        array $options = [],
         ?string $filename = null,
         ?string $path = null,
         ?string $type = null,
@@ -52,18 +29,18 @@ final class LoggableOutput
         ?string $dateFormat = null,
         ?array $extraOptions = null
     ) {
-        $this->options['filename'] = $options['filename'] ?? $filename;
-        $this->options['path'] = $options['path'] ?? $path;
-        $this->options['type'] = $options['type'] ?? $type;
-        $this->options['level'] = $options['level'] ?? $level;
-        $this->options['bubble'] = $options['bubble'] ?? $bubble;
-        $this->options['include_stacktraces'] = $options['includeStacktraces'] ?? $includeStacktraces;
-        $this->options['file_permission'] = $options['filePermission'] ?? $filePermission;
-        $this->options['use_locking'] = $options['useLocking'] ?? $useLocking;
-        $this->options['max_files'] = $options['maxFiles'] ?? $maxFiles;
-        $this->options['filename_format'] = $options['filenameFormat'] ?? $filenameFormat;
-        $this->options['date_format'] = $options['dateFormat'] ?? $dateFormat;
-        $this->options['extra_options'] = $options['extraOptions'] ?? $extraOptions;
+        $this->options['filename'] = $filename;
+        $this->options['path'] = $path;
+        $this->options['type'] = $type;
+        $this->options['level'] = $level;
+        $this->options['bubble'] = $bubble;
+        $this->options['include_stacktraces'] = $includeStacktraces;
+        $this->options['file_permission'] = $filePermission;
+        $this->options['use_locking'] = $useLocking;
+        $this->options['max_files'] = $maxFiles;
+        $this->options['filename_format'] = $filenameFormat;
+        $this->options['date_format'] = $dateFormat;
+        $this->options['extra_options'] = $extraOptions;
 
         self::validateLevel($this->options['level']);
 

@@ -13,7 +13,7 @@ Symfony bundle which creates a dedicated Monolog log file for each command or me
 * Uses Monolog's console handler to display the output inside a terminal
 * Supports using Monolog's stream or rotating file handlers & creating custom handler factories
 * Automatically excludes the configured Monolog channel from all other handlers with exclusive channels
-* Allows per command configuration through the use of PHP 8 attributes or Doctrine annotations
+* Allows per command configuration through the use of PHP 8 attributes
 * Supports configuring which output stream should be used by certain log levels (`stdout` or `stderr`)
 
 ## Requirements
@@ -80,9 +80,6 @@ Symfony bundle which creates a dedicated Monolog log file for each command or me
                 # Examples:
                 my_option1:          'some value'
                 my_option2:          true
-
-            # Enables configuring services with the use of an annotation, requires the Doctrine Annotation library.
-            enable_annotations:   false
 
         # Configuration option used by both handlers.
         process_psr_3_messages:
@@ -191,11 +188,11 @@ class MyMessageHandler implements MessageHandlerInterface, NamedLoggableOutputIn
 }
 ```
 
-### PHP 8 attribute
+### `#[LoggableOutput]` attribute
 
-The default configuration can be overridden for each individual command or message handler by using the `LoggableOutput`
-[PHP attribute](https://www.php.net/manual/en/language.attributes.overview.php). Among other things, it allows you to
-change which Monolog file handler is used by the output logger.
+The default configuration can be overridden for each individual command or message handler by using the
+`#[LoggableOutput]` attribute. Among other things, it allows you to change which Monolog file handler is used by the
+output logger.
 
 ```php
 namespace App;
@@ -262,48 +259,6 @@ class MyMessageHandler extends MyBaseMessageHandler
     }
 }
 ```
-
-### Doctrine annotations
-
-If you're using a version of PHP prior to 8,
-[Doctrine annotations](https://www.doctrine-project.org/projects/annotations.html) can be used instead of PHP attributes
-as a way to override the default configuration.
-
-1. Require the Doctrine annotations library with Composer:
-
-    ```sh
-    composer require doctrine/annotations
-    ```
-
-1. Enable annotations support in the configuration:
-
-    ```yaml
-    bizkit_loggable_command:
-        file_handler_options:
-            enable_annotations: true
-    ```
-
-The `LoggableOutput` PHP attribute also serves as the Doctrine annotation class.
-
-```php
-namespace App;
-
-use Bizkit\LoggableCommandBundle\Command\LoggableCommand;
-use Bizkit\LoggableCommandBundle\ConfigurationProvider\Attribute\LoggableOutput;
-
-/**
- * @LoggableOutput(filename="my_custom_name", type="rotating_file")
- */
-class MyLoggableCommand extends LoggableCommand
-{
-    protected function execute(InputInterface $input, OutputInterface $output): int
-    {
-        // ...
-    }
-}
-```
-
-Annotation options are also inherited from all parent classes.
 
 ### Adding other Monolog handlers to the output logger
 

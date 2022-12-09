@@ -22,18 +22,18 @@ final class MergedConfigurationProviderTest extends TestCase
 
         $provider = $this->createConfigurationProvider(
             $loggableOutput,
-            ['filename' => 'annotation-test', 'level' => LogLevel::CRITICAL, 'max_files' => 4, 'extra_options' => [
+            ['filename' => 'foo', 'level' => LogLevel::CRITICAL, 'max_files' => 4, 'extra_options' => [
                 'foo' => 'one',
                 'bar' => 'two',
             ]],
-            ['filename' => 'attribute-test', 'level' => LogLevel::EMERGENCY, 'bubble' => true, 'extra_options' => [
+            ['filename' => 'bar', 'level' => LogLevel::EMERGENCY, 'bubble' => true, 'extra_options' => [
                 'foo' => 'new one',
                 'baz' => 'three',
             ]]
         );
 
         $this->assertSame(
-            ['filename' => 'annotation-test', 'level' => LogLevel::CRITICAL, 'max_files' => 4, 'bubble' => true, 'extra_options' => [
+            ['filename' => 'foo', 'level' => LogLevel::CRITICAL, 'max_files' => 4, 'bubble' => true, 'extra_options' => [
                 'foo' => 'one',
                 'bar' => 'two',
                 'baz' => 'three',
