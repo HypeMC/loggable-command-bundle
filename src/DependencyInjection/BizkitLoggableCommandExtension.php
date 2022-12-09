@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Bizkit\LoggableCommandBundle\DependencyInjection;
 
-use Bizkit\LoggableCommandBundle\ConfigurationProvider\AnnotationConfigurationProvider;
 use Bizkit\LoggableCommandBundle\ConfigurationProvider\AttributeConfigurationProvider;
 use Bizkit\LoggableCommandBundle\ConfigurationProvider\ConfigurationProviderInterface;
 use Bizkit\LoggableCommandBundle\ConfigurationProvider\DefaultConfigurationProvider;
@@ -12,14 +11,12 @@ use Bizkit\LoggableCommandBundle\DependencyInjection\Configurator\LoggableOutput
 use Bizkit\LoggableCommandBundle\Handler\ConsoleHandler;
 use Bizkit\LoggableCommandBundle\HandlerFactory\HandlerFactoryInterface;
 use Bizkit\LoggableCommandBundle\LoggableOutput\LoggableOutputInterface;
-use Doctrine\Common\Annotations\Annotation;
 use Monolog\Logger;
 use Monolog\Processor\PsrLogMessageProcessor;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
-use Symfony\Component\DependencyInjection\Exception\LogicException;
 use Symfony\Component\DependencyInjection\Exception\RuntimeException;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader;
@@ -65,14 +62,6 @@ final class BizkitLoggableCommandExtension extends ConfigurableExtension impleme
 
         if (\PHP_VERSION_ID < 80000) {
             $container->removeDefinition(AttributeConfigurationProvider::class);
-        }
-
-        if ($mergedConfig['file_handler_options']['enable_annotations']) {
-            if (!class_exists(Annotation::class)) {
-                throw new LogicException('Annotations cannot be enabled as the Doctrine Annotation library is not installed. Try running "composer require doctrine/annotations".');
-            }
-        } else {
-            $container->removeDefinition(AnnotationConfigurationProvider::class);
         }
 
         $container->setParameter('bizkit_loggable_command.channel_name', $mergedConfig['channel_name']);

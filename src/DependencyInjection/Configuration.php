@@ -88,10 +88,6 @@ EOT
                             ->addDefaultsIfNotSet()
                             ->ignoreExtraKeys(false)
                         ->end()
-                        ->booleanNode('enable_annotations')
-                            ->info('Enables configuring services with the use of an annotation, requires the Doctrine Annotation library.')
-                            ->defaultFalse()
-                        ->end()
                     ->end()
                 ->end()
 

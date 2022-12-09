@@ -20,21 +20,6 @@
         "count": 4
     },
     {
-        "location": "Bizkit\\LoggableCommandBundle\\Tests\\DependencyInjection\\BizkitLoggableCommandExtensionTest::testAnnotationConfigurationProviderIsRemovedWhenDisabled",
-        "message": "Function libxml_disable_entity_loader() is deprecated",
-        "count": 4
-    },
-    {
-        "location": "Bizkit\\LoggableCommandBundle\\Tests\\DependencyInjection\\BizkitLoggableCommandExtensionTest::testAnnotationConfigurationProviderIsNotRemovedWhenEnabled",
-        "message": "Function libxml_disable_entity_loader() is deprecated",
-        "count": 4
-    },
-    {
-        "location": "Bizkit\\LoggableCommandBundle\\Tests\\DependencyInjection\\BizkitLoggableCommandExtensionTest::testExceptionIsThrownWhenAnnotationConfigurationProviderIsEnabledAndAnnotationsAreNotInstalled",
-        "message": "Function libxml_disable_entity_loader() is deprecated",
-        "count": 4
-    },
-    {
         "location": "Bizkit\\LoggableCommandBundle\\Tests\\DependencyInjection\\BizkitLoggableCommandExtensionTest::testChannelNameParameterIsSet",
         "message": "Function libxml_disable_entity_loader() is deprecated",
         "count": 4

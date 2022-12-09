@@ -11,7 +11,6 @@ return (new PhpCsFixer\Config())
     ->setParallelConfig(PhpCsFixer\Runner\Parallel\ParallelConfigFactory::detect())
     ->setUsingCache(true)
     ->setRules([
-        '@DoctrineAnnotation' => true,
         '@PHP71Migration' => true,
         '@PHPUnit100Migration:risky' => true,
         '@Symfony' => true,
@@ -20,9 +19,6 @@ return (new PhpCsFixer\Config())
         'heredoc_to_nowdoc' => true,
         'no_superfluous_phpdoc_tags' => true,
         'php_unit_test_case_static_method_calls' => ['call_type' => 'self'],
-        'phpdoc_separation' => [
-            'groups' => [['Common\\*']],
-        ],
         'self_static_accessor' => true,
         'single_line_throw' => false,
         'trailing_comma_in_multiline' => ['after_heredoc' => true, 'elements' => ['array_destructuring', 'arrays']],

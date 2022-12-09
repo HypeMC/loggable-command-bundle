@@ -41,7 +41,6 @@ final class ConfigurationTest extends TestCase
                 'filename_format' => '{filename}-{date}',
                 'date_format' => 'Y-m-d',
                 'extra_options' => [],
-                'enable_annotations' => false,
             ],
             'process_psr_3_messages' => [
                 'enabled' => true,
