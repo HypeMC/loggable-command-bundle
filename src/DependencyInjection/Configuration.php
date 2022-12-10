@@ -100,12 +100,8 @@ EOT
                     ])
                     ->addDefaultsIfNotSet()
                     ->beforeNormalization()
-                        ->ifTrue(static function ($v): bool {
-                            return !\is_array($v);
-                        })
-                        ->then(static function ($v): array {
-                            return ['enabled' => $v];
-                        })
+                        ->ifTrue(static fn ($v): bool => !\is_array($v))
+                        ->then(static fn ($v): array => ['enabled' => $v])
                     ->end()
                     ->children()
                         ->booleanNode('enabled')->defaultTrue()->end()
@@ -116,9 +112,7 @@ EOT
             ->end()
 
             ->validate()
-                ->ifTrue(static function (array $v): bool {
-                    return !isset($v['console_handler_options']['verbosity_levels']);
-                })
+                ->ifTrue(static fn (array $v): bool => !isset($v['console_handler_options']['verbosity_levels']))
                 ->then(static function (array $v): array {
                     $v['console_handler_options']['verbosity_levels'] = [];
 

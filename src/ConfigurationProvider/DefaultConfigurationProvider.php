@@ -8,14 +8,9 @@ use Bizkit\LoggableCommandBundle\LoggableOutput\LoggableOutputInterface;
 
 final class DefaultConfigurationProvider extends AbstractConfigurationProvider
 {
-    /**
-     * @var array
-     */
-    private $handlerOptions;
-
-    public function __construct(array $handlerOptions)
-    {
-        $this->handlerOptions = $handlerOptions;
+    public function __construct(
+        private readonly array $handlerOptions,
+    ) {
     }
 
     public function __invoke(LoggableOutputInterface $loggableOutput): array

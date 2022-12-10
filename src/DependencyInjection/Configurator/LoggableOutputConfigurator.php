@@ -16,36 +16,12 @@ use Symfony\Contracts\Service\ServiceProviderInterface;
  */
 final class LoggableOutputConfigurator
 {
-    /**
-     * @var ConfigurationProviderInterface
-     */
-    private $configurationProvider;
-
-    /**
-     * @var PathResolverInterface
-     */
-    private $pathResolver;
-
-    /**
-     * @var Logger
-     */
-    private $templateLogger;
-
-    /**
-     * @var ServiceProviderInterface
-     */
-    private $handlerFactoryLocator;
-
     public function __construct(
-        ConfigurationProviderInterface $configurationProvider,
-        PathResolverInterface $pathResolver,
-        Logger $templateLogger,
-        ServiceProviderInterface $handlerFactoryLocator
+        private readonly ConfigurationProviderInterface $configurationProvider,
+        private readonly PathResolverInterface $pathResolver,
+        private readonly Logger $templateLogger,
+        private readonly ServiceProviderInterface $handlerFactoryLocator,
     ) {
-        $this->configurationProvider = $configurationProvider;
-        $this->pathResolver = $pathResolver;
-        $this->templateLogger = $templateLogger;
-        $this->handlerFactoryLocator = $handlerFactoryLocator;
     }
 
     public function __invoke(LoggableOutputInterface $loggableOutput): void
@@ -70,12 +46,10 @@ final class LoggableOutputConfigurator
 
     private function getHandlerFactory(string $handlerType): HandlerFactoryInterface
     {
-        if (!$this->handlerFactoryLocator->has($handlerType)) {
-            throw new \RuntimeException(
-                sprintf('The handler factory "%s" is not registered in the handler factory locator.', $handlerType)
+        return $this->handlerFactoryLocator->has($handlerType)
+            ? $this->handlerFactoryLocator->get($handlerType)
+            : throw new \RuntimeException(
+                sprintf('The handler factory "%s" is not registered in the handler factory locator.', $handlerType),
             );
-        }
-
-        return $this->handlerFactoryLocator->get($handlerType);
     }
 }

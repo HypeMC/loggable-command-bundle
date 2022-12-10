@@ -49,9 +49,7 @@ final class ExcludeMonologChannelPassTest extends TestCase
 
         $this->assertSame($expectedLog, array_values(array_filter(
             $container->getCompiler()->getLog(),
-            function (string $log): bool {
-                return 0 === strpos($log, ExcludeMonologChannelPass::class);
-            }
+            static fn (string $log): bool => str_starts_with($log, ExcludeMonologChannelPass::class),
         )));
     }
 

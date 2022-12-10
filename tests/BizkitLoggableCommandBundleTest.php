@@ -27,7 +27,7 @@ final class BizkitLoggableCommandBundleTest extends TestCase
 
         $compilerPassIndexes = [];
         foreach ($container->getCompilerPassConfig()->getBeforeOptimizationPasses() as $i => $compilerPass) {
-            $compilerPassIndexes[\get_class($compilerPass)] = $i;
+            $compilerPassIndexes[$compilerPass::class] = $i;
         }
 
         $this->assertArrayHasKey(LoggerChannelPass::class, $compilerPassIndexes);
@@ -35,7 +35,7 @@ final class BizkitLoggableCommandBundleTest extends TestCase
 
         $this->assertGreaterThan(
             $compilerPassIndexes[ExcludeMonologChannelPass::class],
-            $compilerPassIndexes[LoggerChannelPass::class]
+            $compilerPassIndexes[LoggerChannelPass::class],
         );
     }
 }

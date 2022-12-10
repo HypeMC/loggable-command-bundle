@@ -29,12 +29,12 @@ final class AttributeConfigurationProviderTest extends TestCase
         $handlerOptions = ['filename' => 'attribute-test', 'level' => LogLevel::EMERGENCY, 'bubble' => true];
 
         $provider = $this->createConfigurationProvider(
-            $this->createContainerBagWithResolveValueMethodCalled($handlerOptions)
+            $this->createContainerBagWithResolveValueMethodCalled($handlerOptions),
         );
 
         $this->assertSame(
             $handlerOptions,
-            $provider(new DummyLoggableOutputWithAttribute())
+            $provider(new DummyLoggableOutputWithAttribute()),
         );
     }
 
@@ -43,12 +43,12 @@ final class AttributeConfigurationProviderTest extends TestCase
         $handlerOptions = ['filename' => 'child-attribute-test', 'level' => LogLevel::EMERGENCY, 'bubble' => true];
 
         $provider = $this->createConfigurationProvider(
-            $this->createContainerBagWithResolveValueMethodCalled($handlerOptions)
+            $this->createContainerBagWithResolveValueMethodCalled($handlerOptions),
         );
 
         $this->assertSame(
             $handlerOptions,
-            $provider(new DummyChildLoggableOutputWithAttribute())
+            $provider(new DummyChildLoggableOutputWithAttribute()),
         );
     }
 
@@ -57,19 +57,19 @@ final class AttributeConfigurationProviderTest extends TestCase
         $handlerOptions = ['filename' => 'attribute-test', 'level' => LogLevel::EMERGENCY, 'bubble' => true];
 
         $provider = $this->createConfigurationProvider(
-            $this->createContainerBagWithResolveValueMethodCalled($handlerOptions)
+            $this->createContainerBagWithResolveValueMethodCalled($handlerOptions),
         );
 
         $this->assertSame(
             $handlerOptions,
-            $provider(new DummyChildLoggableOutputWithParentAttribute())
+            $provider(new DummyChildLoggableOutputWithParentAttribute()),
         );
     }
 
     public function testProviderReturnsEmptyConfigWhenAttributeIsNotFound(): void
     {
         $provider = $this->createConfigurationProvider(
-            $this->createContainerBagWithoutResolveValueMethodCalled()
+            $this->createContainerBagWithoutResolveValueMethodCalled(),
         );
 
         $this->assertSame([], $provider(new DummyLoggableOutput()));
@@ -80,14 +80,14 @@ final class AttributeConfigurationProviderTest extends TestCase
         $handlerOptions = ['filename' => 'attribute-test', 'path' => '/var/log/messenger/{filename}.log'];
 
         $provider = $this->createConfigurationProvider(
-            new ContainerBag($container = new Container())
+            new ContainerBag($container = new Container()),
         );
 
         $container->setParameter('kernel.logs_dir', '/var/log');
 
         $this->assertSame(
             $handlerOptions,
-            $provider(new DummyLoggableOutputWithAttributeAndParam())
+            $provider(new DummyLoggableOutputWithAttributeAndParam()),
         );
     }
 

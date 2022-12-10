@@ -16,7 +16,7 @@ final class StreamHandlerFactory extends AbstractHandlerFactory
             $handlerOptions['level'],
             $handlerOptions['bubble'],
             $handlerOptions['file_permission'],
-            $handlerOptions['use_locking']
+            $handlerOptions['use_locking'],
         );
     }
 }

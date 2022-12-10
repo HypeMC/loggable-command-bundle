@@ -59,7 +59,7 @@ final class ConsoleHandlerTest extends TestCase
         $this->assertSame(Logger::toMonologLevel(LogLevel::WARNING), $consoleHandler->getLevel());
 
         $consoleHandler->onTerminate(new ConsoleTerminateEvent(
-            new Command(), $this->createMock(InputInterface::class), $this->createMock(OutputInterface::class), 0
+            new Command(), $this->createMock(InputInterface::class), $this->createMock(OutputInterface::class), 0,
         ));
         $this->assertFalse($innerConsoleHandler->isHandling($this->getRecord(LogLevel::ERROR)));
         $this->assertFalse($consoleHandler->isHandling($this->getRecord(LogLevel::ERROR)));
@@ -154,10 +154,8 @@ final class ConsoleHandlerTest extends TestCase
 
     /**
      * @param LogLevel::* $level
-     *
-     * @return array|LogRecord
      */
-    private function getRecord(string $level = LogLevel::WARNING)
+    private function getRecord(string $level = LogLevel::WARNING): array|LogRecord
     {
         $record = [
             'datetime' => new \DateTimeImmutable('2021-01-31 13:50:02'),

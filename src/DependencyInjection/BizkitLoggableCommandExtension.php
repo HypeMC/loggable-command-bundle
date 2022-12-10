@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Bizkit\LoggableCommandBundle\DependencyInjection;
 
-use Bizkit\LoggableCommandBundle\ConfigurationProvider\AttributeConfigurationProvider;
 use Bizkit\LoggableCommandBundle\ConfigurationProvider\ConfigurationProviderInterface;
 use Bizkit\LoggableCommandBundle\ConfigurationProvider\DefaultConfigurationProvider;
 use Bizkit\LoggableCommandBundle\DependencyInjection\Configurator\LoggableOutputConfigurator;
@@ -28,7 +27,7 @@ final class BizkitLoggableCommandExtension extends ConfigurableExtension impleme
     /**
      * @var array{enabled: bool, date_format?: ?string, remove_used_context_fields?: bool}
      */
-    private $processPsr3Messages;
+    private array $processPsr3Messages;
 
     public function prepend(ContainerBuilder $container): void
     {
@@ -59,10 +58,6 @@ final class BizkitLoggableCommandExtension extends ConfigurableExtension impleme
 
         $loader = new Loader\XmlFileLoader($container, new FileLocator(\dirname(__DIR__, 2).'/config'));
         $loader->load('services.xml');
-
-        if (\PHP_VERSION_ID < 80000) {
-            $container->removeDefinition(AttributeConfigurationProvider::class);
-        }
 
         $container->setParameter('bizkit_loggable_command.channel_name', $mergedConfig['channel_name']);
 

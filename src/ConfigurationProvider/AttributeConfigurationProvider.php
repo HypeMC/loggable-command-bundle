@@ -10,14 +10,9 @@ use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
 
 final class AttributeConfigurationProvider extends AbstractConfigurationProvider
 {
-    /**
-     * @var ContainerBagInterface
-     */
-    private $containerBag;
-
-    public function __construct(ContainerBagInterface $containerBag)
-    {
-        $this->containerBag = $containerBag;
+    public function __construct(
+        private readonly ContainerBagInterface $containerBag,
+    ) {
     }
 
     public function __invoke(LoggableOutputInterface $loggableOutput): array
@@ -35,7 +30,7 @@ final class AttributeConfigurationProvider extends AbstractConfigurationProvider
             /** @var LoggableOutput $attribute */
             $attribute = $reflectionAttribute->newInstance();
 
-            $configuration = self::mergeConfigurations($configuration, $attribute->getOptions());
+            $configuration = self::mergeConfigurations($configuration, $attribute->options);
         } while (false !== $reflectionObject = $reflectionObject->getParentClass());
 
         return $configuration ? $this->containerBag->resolveValue($configuration) : $configuration;

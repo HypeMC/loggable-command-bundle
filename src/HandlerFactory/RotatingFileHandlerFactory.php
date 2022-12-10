@@ -17,12 +17,12 @@ final class RotatingFileHandlerFactory extends AbstractHandlerFactory
             $handlerOptions['level'],
             $handlerOptions['bubble'],
             $handlerOptions['file_permission'],
-            $handlerOptions['use_locking']
+            $handlerOptions['use_locking'],
         );
 
         $handler->setFilenameFormat(
             $handlerOptions['filename_format'],
-            $handlerOptions['date_format']
+            $handlerOptions['date_format'],
         );
 
         return $handler;

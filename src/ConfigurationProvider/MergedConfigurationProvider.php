@@ -9,13 +9,11 @@ use Bizkit\LoggableCommandBundle\LoggableOutput\LoggableOutputInterface;
 final class MergedConfigurationProvider extends AbstractConfigurationProvider
 {
     /**
-     * @var ConfigurationProviderInterface[]
+     * @param ConfigurationProviderInterface[] $configurationProviders
      */
-    private $configurationProviders;
-
-    public function __construct(iterable $configurationProviders)
-    {
-        $this->configurationProviders = $configurationProviders;
+    public function __construct(
+        private readonly iterable $configurationProviders,
+    ) {
     }
 
     public function __invoke(LoggableOutputInterface $loggableOutput): array
