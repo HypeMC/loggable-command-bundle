@@ -21,7 +21,7 @@ final class DefaultFilenameProvider implements FilenameProviderInterface
             return str_replace([':', '-'], '_', $name);
         }
 
-        $classBaseName = substr(strrchr(\get_class($loggableOutput), '\\'), 1);
+        $classBaseName = substr(strrchr($loggableOutput::class, '\\'), 1);
 
         return Container::underscore($classBaseName);
     }

@@ -37,6 +37,6 @@ parameters:
             path: src/Handler/ConsoleHandler.php
 
         -
-            message: '#^Parameter \#4 \$level of class Bizkit\\LoggableCommandBundle\\ConfigurationProvider\\Attribute\\LoggableOutput constructor expects int\|string\|null, true given\.$#'
+            message: '#^Method Bizkit\\LoggableCommandBundle\\Handler\\ConsoleHandler\:\:doGetLevel\(\) never returns int so it can be removed from the return type\.$#'
             count: 1
-            path: tests/ConfigurationProvider/Attribute/LoggableOutputTest.php
+            path: src/Handler/ConsoleHandler.php

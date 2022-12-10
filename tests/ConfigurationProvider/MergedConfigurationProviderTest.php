@@ -29,7 +29,7 @@ final class MergedConfigurationProviderTest extends TestCase
             ['filename' => 'bar', 'level' => LogLevel::EMERGENCY, 'bubble' => true, 'extra_options' => [
                 'foo' => 'new one',
                 'baz' => 'three',
-            ]]
+            ]],
         );
 
         self::assertSame(
@@ -38,13 +38,13 @@ final class MergedConfigurationProviderTest extends TestCase
                 'bar' => 'two',
                 'baz' => 'three',
             ]],
-            $provider($loggableOutput)
+            $provider($loggableOutput),
         );
     }
 
     private function createConfigurationProvider(
         LoggableOutputInterface $loggableOutput,
-        array ...$handlerOptionsGroups
+        array ...$handlerOptionsGroups,
     ): ConfigurationProviderInterface {
         $handlers = [];
 

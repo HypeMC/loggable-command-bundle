@@ -20,13 +20,10 @@ final class AbstractConfigurationProviderTest extends TestCase
     public function testConfigurationsAreMergedAsExpected(array $config1, array $config2, array $mergedConfig): void
     {
         $configurationProvider = new class($config1, $config2) extends AbstractConfigurationProvider {
-            private $config1;
-            private $config2;
-
-            public function __construct(array $config1, array $config2)
-            {
-                $this->config1 = $config1;
-                $this->config2 = $config2;
+            public function __construct(
+                private readonly array $config1,
+                private readonly array $config2,
+            ) {
             }
 
             public function __invoke(LoggableOutputInterface $loggableOutput): array

@@ -65,9 +65,6 @@ final class HandlerFactoriesTest extends TestCase
 
     private function getPropertyValue(HandlerInterface $handler, string $propertyName)
     {
-        $reflectionProperty = new \ReflectionProperty($handler, $propertyName);
-        $reflectionProperty->setAccessible(true);
-
-        return $reflectionProperty->getValue($handler);
+        return (new \ReflectionProperty($handler, $propertyName))->getValue($handler);
     }
 }

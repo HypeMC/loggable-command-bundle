@@ -89,20 +89,15 @@ final class AbstractHandlerFactoryTest extends TestCase
     private function createHandlerFactory(
         HandlerInterface $handler,
         ?ProcessorInterface $psrLogMessageProcessor,
-        ?FormatterInterface $formatter
+        ?FormatterInterface $formatter,
     ): HandlerFactoryInterface {
         return new class($handler, $psrLogMessageProcessor, $formatter) extends AbstractHandlerFactory {
-            /** @var HandlerInterface */
-            private $handler;
-
             public function __construct(
-                HandlerInterface $handler,
+                private readonly HandlerInterface $handler,
                 ?ProcessorInterface $psrLogMessageProcessor,
-                ?FormatterInterface $formatter
+                ?FormatterInterface $formatter,
             ) {
                 parent::__construct($psrLogMessageProcessor, $formatter);
-
-                $this->handler = $handler;
             }
 
             protected function getHandler(array $handlerOptions): HandlerInterface

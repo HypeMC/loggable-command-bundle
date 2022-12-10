@@ -13,20 +13,10 @@ use Symfony\Bundle\MonologBundle\MonologBundle;
 
 abstract class AbstractHandlerFactory implements HandlerFactoryInterface
 {
-    /**
-     * @var ProcessorInterface|null
-     */
-    private $psrLogMessageProcessor;
-
-    /**
-     * @var FormatterInterface|null
-     */
-    private $formatter;
-
-    public function __construct(?ProcessorInterface $psrLogMessageProcessor = null, ?FormatterInterface $formatter = null)
-    {
-        $this->psrLogMessageProcessor = $psrLogMessageProcessor;
-        $this->formatter = $formatter;
+    public function __construct(
+        private readonly ?ProcessorInterface $psrLogMessageProcessor = null,
+        private readonly ?FormatterInterface $formatter = null,
+    ) {
     }
 
     public function __invoke(array $handlerOptions): HandlerInterface

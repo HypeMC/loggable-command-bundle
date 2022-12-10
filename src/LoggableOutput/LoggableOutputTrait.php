@@ -8,10 +8,7 @@ use Psr\Log\LoggerInterface;
 
 trait LoggableOutputTrait
 {
-    /**
-     * @var LoggerInterface
-     */
-    protected $outputLogger;
+    protected LoggerInterface $outputLogger;
 
     public function setOutputLogger(LoggerInterface $outputLogger): void
     {

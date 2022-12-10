@@ -51,10 +51,8 @@ final class LoggableOutputConfiguratorTest extends TestCase
             $pathResolver,
             $templateLogger = new Logger('foo'),
             new ServiceLocator([
-                'dummy' => static function () {
-                    return new DummyHandlerFactory();
-                },
-            ])
+                'dummy' => static fn () => new DummyHandlerFactory(),
+            ]),
         );
 
         $configurator($loggableOutput);
@@ -96,7 +94,7 @@ final class LoggableOutputConfiguratorTest extends TestCase
             new DefaultConfigurationProvider($handlerOptions),
             $pathResolver,
             $templateLogger,
-            new ServiceLocator([])
+            new ServiceLocator([]),
         );
 
         $loggableOutput = new DummyLoggableOutput();

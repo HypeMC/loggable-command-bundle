@@ -49,7 +49,7 @@ final class BizkitLoggableCommandExtensionTest extends TestCase
         $container->registerExtension($loggableCommandExtension = new BizkitLoggableCommandExtension());
         $container->loadFromExtension(
             $loggableCommandExtensionAlias = $loggableCommandExtension->getAlias(),
-            ['channel_name' => 'foo_channel']
+            ['channel_name' => 'foo_channel'],
         );
 
         $loggableCommandExtension->prepend($container);
@@ -325,7 +325,7 @@ final class BizkitLoggableCommandExtensionTest extends TestCase
 
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage(
-            'Monolog 1.26 or higher is required for the "date_format" and "remove_used_context_fields" options to be used.'
+            'Monolog 1.26 or higher is required for the "date_format" and "remove_used_context_fields" options to be used.',
         );
 
         $loggableCommandExtension->process($container);
@@ -342,7 +342,7 @@ final class BizkitLoggableCommandExtensionTest extends TestCase
 
         $container->register(
             'monolog.processor.psr_log_message.'.ContainerBuilder::hash([null, true]),
-            PsrLogMessageProcessor::class
+            PsrLogMessageProcessor::class,
         );
 
         $loggableCommandExtension->load([[
@@ -368,7 +368,7 @@ final class BizkitLoggableCommandExtensionTest extends TestCase
 
         $container->register(
             'monolog.processor.psr_log_message.'.ContainerBuilder::hash([null, true]),
-            PsrLogMessageProcessor::class
+            PsrLogMessageProcessor::class,
         );
 
         $loggableCommandExtension->load([[

@@ -66,36 +66,17 @@ final class ConsoleHandler extends AbstractHandler implements ProcessableHandler
 {
     use CompatibilityHandlerTrait;
 
-    /**
-     * @var BaseConsoleHandler
-     */
-    private $innerHandler;
+    private int $stdErrThreshold;
+    private ?OutputInterface $standardOutput;
+    private ?OutputInterface $errorOutput;
 
-    /**
-     * @var int
-     */
-    private $stdErrThreshold;
-
-    /**
-     * @var OutputInterface|null
-     */
-    private $standardOutput;
-
-    /**
-     * @var OutputInterface|null
-     */
-    private $errorOutput;
-
-    public function __construct(BaseConsoleHandler $innerHandler)
-    {
-        $this->innerHandler = $innerHandler;
+    public function __construct(
+        private readonly BaseConsoleHandler $innerHandler,
+    ) {
         $this->setStdErrThreshold(Logger::toMonologLevel(LogLevel::WARNING));
     }
 
-    /**
-     * @param int|Level $stdErrThreshold
-     */
-    public function setStdErrThreshold($stdErrThreshold): void
+    public function setStdErrThreshold(int|Level $stdErrThreshold): void
     {
         $this->stdErrThreshold = $stdErrThreshold instanceof Level ? $stdErrThreshold->value : $stdErrThreshold;
     }
@@ -143,10 +124,10 @@ final class ConsoleHandler extends AbstractHandler implements ProcessableHandler
         $this->close();
     }
 
-    private function doHandle($record): bool
+    private function doHandle(array|LogRecord $record): bool
     {
         $this->innerHandler->setOutput(
-            $record['level'] < $this->stdErrThreshold ? $this->standardOutput : $this->errorOutput
+            $record['level'] < $this->stdErrThreshold ? $this->standardOutput : $this->errorOutput,
         );
 
         return $this->innerHandler->handle($record);
@@ -157,7 +138,7 @@ final class ConsoleHandler extends AbstractHandler implements ProcessableHandler
         return BaseConsoleHandler::getSubscribedEvents();
     }
 
-    private function doIsHandling($record): bool
+    private function doIsHandling(array|LogRecord $record): bool
     {
         return $this->innerHandler->isHandling($record);
     }
@@ -203,7 +184,7 @@ final class ConsoleHandler extends AbstractHandler implements ProcessableHandler
         return $this;
     }
 
-    private function doGetLevel()
+    private function doGetLevel(): int|Level
     {
         return $this->innerHandler->getLevel();
     }
