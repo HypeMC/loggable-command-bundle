@@ -50,10 +50,17 @@
 
         <service id="Bizkit\LoggableCommandBundle\DependencyInjection\Configurator\LoggableOutputConfigurator">
             <argument type="service" id="Bizkit\LoggableCommandBundle\ConfigurationProvider\ConfigurationProviderInterface" />
-            <argument type="service" id="Bizkit\LoggableCommandBundle\FilenameProvider\FilenameProviderInterface" />
+            <argument type="service" id="Bizkit\LoggableCommandBundle\PathResolver\PathResolverInterface" />
             <argument /> <!-- template logger -->
             <argument type="tagged_locator" tag="bizkit_loggable_command.handler_factory" index-by="type" />
         </service>
+
+        <service id="Bizkit\LoggableCommandBundle\PathResolver\DefaultPathResolver">
+            <argument type="service" id="Bizkit\LoggableCommandBundle\FilenameProvider\FilenameProviderInterface" />
+        </service>
+
+        <service id="Bizkit\LoggableCommandBundle\PathResolver\PathResolverInterface"
+                 alias="Bizkit\LoggableCommandBundle\PathResolver\DefaultPathResolver" />
 
         <service id="Bizkit\LoggableCommandBundle\FilenameProvider\DefaultFilenameProvider" />
 
