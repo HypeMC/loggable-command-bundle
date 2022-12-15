@@ -47,7 +47,7 @@ final class BizkitLoggableCommandExtensionTest extends TestCase
     public function testMonologConfigurationIsPrepended(): void
     {
         $container = new ContainerBuilder();
-        $container->registerExtension($monologExtension = new MonologExtension());
+        $container->registerExtension(new MonologExtension());
 
         $container->registerExtension($loggableCommandExtension = new BizkitLoggableCommandExtension());
         $container->loadFromExtension(
