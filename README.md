@@ -3,7 +3,7 @@
 [![Build Status](https://github.com/HypeMC/loggable-command-bundle/workflows/CI/badge.svg)](https://github.com/HypeMC/loggable-command-bundle/actions)
 [![Latest Stable Version](https://poser.pugx.org/bizkit/loggable-command-bundle/v/stable)](https://packagist.org/packages/bizkit/loggable-command-bundle)
 [![License](https://poser.pugx.org/bizkit/loggable-command-bundle/license)](https://packagist.org/packages/bizkit/loggable-command-bundle)
-[![Code Coverage](https://codecov.io/gh/HypeMC/loggable-command-bundle/branch/main/graph/badge.svg)](https://codecov.io/gh/HypeMC/loggable-command-bundle)
+[![Code Coverage](https://codecov.io/gh/HypeMC/loggable-command-bundle/branch/1.x/graph/badge.svg)](https://codecov.io/gh/HypeMC/loggable-command-bundle)
 
 Symfony bundle which creates a dedicated Monolog log file for each command or message handler.
 
