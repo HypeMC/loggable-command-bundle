@@ -6,7 +6,7 @@ namespace Bizkit\LoggableCommandBundle\Tests\ConfigurationProvider;
 
 use Bizkit\LoggableCommandBundle\ConfigurationProvider\ConfigurationProviderInterface;
 use Bizkit\LoggableCommandBundle\ConfigurationProvider\DefaultConfigurationProvider;
-use Bizkit\LoggableCommandBundle\Tests\ConfigurationProvider\Fixtures\DummyLoggableOutput;
+use Bizkit\LoggableCommandBundle\Tests\Fixtures\DummyLoggableOutput;
 use Bizkit\LoggableCommandBundle\Tests\TestCase;
 
 /**

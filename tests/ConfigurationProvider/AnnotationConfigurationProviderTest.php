@@ -8,9 +8,9 @@ use Bizkit\LoggableCommandBundle\ConfigurationProvider\AnnotationConfigurationPr
 use Bizkit\LoggableCommandBundle\ConfigurationProvider\ConfigurationProviderInterface;
 use Bizkit\LoggableCommandBundle\Tests\ConfigurationProvider\Fixtures\DummyChildLoggableOutputWithAnnotation;
 use Bizkit\LoggableCommandBundle\Tests\ConfigurationProvider\Fixtures\DummyChildLoggableOutputWithParentAnnotation;
-use Bizkit\LoggableCommandBundle\Tests\ConfigurationProvider\Fixtures\DummyLoggableOutput;
 use Bizkit\LoggableCommandBundle\Tests\ConfigurationProvider\Fixtures\DummyLoggableOutputWithAnnotation;
 use Bizkit\LoggableCommandBundle\Tests\ConfigurationProvider\Fixtures\DummyLoggableOutputWithAnnotationAndParam;
+use Bizkit\LoggableCommandBundle\Tests\Fixtures\DummyLoggableOutput;
 use Bizkit\LoggableCommandBundle\Tests\TestCase;
 use Doctrine\Common\Annotations\Annotation;
 use Doctrine\Common\Annotations\AnnotationReader;

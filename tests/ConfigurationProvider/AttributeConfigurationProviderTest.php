@@ -8,9 +8,9 @@ use Bizkit\LoggableCommandBundle\ConfigurationProvider\AttributeConfigurationPro
 use Bizkit\LoggableCommandBundle\ConfigurationProvider\ConfigurationProviderInterface;
 use Bizkit\LoggableCommandBundle\Tests\ConfigurationProvider\Fixtures\DummyChildLoggableOutputWithAttribute;
 use Bizkit\LoggableCommandBundle\Tests\ConfigurationProvider\Fixtures\DummyChildLoggableOutputWithParentAttribute;
-use Bizkit\LoggableCommandBundle\Tests\ConfigurationProvider\Fixtures\DummyLoggableOutput;
 use Bizkit\LoggableCommandBundle\Tests\ConfigurationProvider\Fixtures\DummyLoggableOutputWithAttribute;
 use Bizkit\LoggableCommandBundle\Tests\ConfigurationProvider\Fixtures\DummyLoggableOutputWithAttributeAndParam;
+use Bizkit\LoggableCommandBundle\Tests\Fixtures\DummyLoggableOutput;
 use Bizkit\LoggableCommandBundle\Tests\TestCase;
 use Psr\Log\LogLevel;
 use Symfony\Component\DependencyInjection\Container;

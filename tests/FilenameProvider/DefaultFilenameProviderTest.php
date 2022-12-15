@@ -7,9 +7,9 @@ namespace Bizkit\LoggableCommandBundle\Tests\FilenameProvider;
 use Bizkit\LoggableCommandBundle\FilenameProvider\DefaultFilenameProvider;
 use Bizkit\LoggableCommandBundle\Tests\FilenameProvider\Fixtures\DummyLoggableCommand;
 use Bizkit\LoggableCommandBundle\Tests\FilenameProvider\Fixtures\DummyLoggableCommandWithoutName;
-use Bizkit\LoggableCommandBundle\Tests\FilenameProvider\Fixtures\DummyLoggableOutput;
 use Bizkit\LoggableCommandBundle\Tests\FilenameProvider\Fixtures\DummyNamedLoggableCommand;
 use Bizkit\LoggableCommandBundle\Tests\FilenameProvider\Fixtures\DummyNamedLoggableOutput;
+use Bizkit\LoggableCommandBundle\Tests\Fixtures\DummyLoggableOutput;
 use Bizkit\LoggableCommandBundle\Tests\TestCase;
 
 /**

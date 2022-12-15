@@ -13,7 +13,7 @@ use Bizkit\LoggableCommandBundle\Handler\ConsoleHandler;
 use Bizkit\LoggableCommandBundle\Tests\DependencyInjection\Fixtures\DummyConfigurationProvider;
 use Bizkit\LoggableCommandBundle\Tests\DependencyInjection\Fixtures\DummyFormatter;
 use Bizkit\LoggableCommandBundle\Tests\DependencyInjection\Fixtures\DummyHandlerFactory;
-use Bizkit\LoggableCommandBundle\Tests\DependencyInjection\Fixtures\DummyLoggableOutput;
+use Bizkit\LoggableCommandBundle\Tests\Fixtures\DummyLoggableOutput;
 use Bizkit\LoggableCommandBundle\Tests\TestCase;
 use Doctrine\Common\Annotations\Annotation;
 use Monolog\Level;

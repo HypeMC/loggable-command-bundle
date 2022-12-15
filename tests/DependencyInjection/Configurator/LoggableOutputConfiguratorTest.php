@@ -10,7 +10,7 @@ use Bizkit\LoggableCommandBundle\FilenameProvider\DefaultFilenameProvider;
 use Bizkit\LoggableCommandBundle\FilenameProvider\FilenameProviderInterface;
 use Bizkit\LoggableCommandBundle\Tests\DependencyInjection\Fixtures\DummyHandler;
 use Bizkit\LoggableCommandBundle\Tests\DependencyInjection\Fixtures\DummyHandlerFactory;
-use Bizkit\LoggableCommandBundle\Tests\DependencyInjection\Fixtures\DummyLoggableOutput;
+use Bizkit\LoggableCommandBundle\Tests\Fixtures\DummyLoggableOutput;
 use Bizkit\LoggableCommandBundle\Tests\TestCase;
 use Monolog\Logger;
 use Symfony\Bridge\PhpUnit\ClockMock;

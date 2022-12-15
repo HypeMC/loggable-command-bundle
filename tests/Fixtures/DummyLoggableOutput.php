@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Bizkit\LoggableCommandBundle\Tests\DependencyInjection\Fixtures;
+namespace Bizkit\LoggableCommandBundle\Tests\Fixtures;
 
 use Bizkit\LoggableCommandBundle\LoggableOutput\LoggableOutputInterface;
 use Bizkit\LoggableCommandBundle\LoggableOutput\LoggableOutputTrait;
 use Psr\Log\LoggerInterface;
 
-final class DummyLoggableOutput implements LoggableOutputInterface
+class DummyLoggableOutput implements LoggableOutputInterface
 {
     use LoggableOutputTrait;
 
