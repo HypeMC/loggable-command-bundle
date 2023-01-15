@@ -52,7 +52,7 @@ final class LoggableOutputConfigurator
     {
         $handlerOptions = ($this->configurationProvider)($loggableOutput);
 
-        $handlerOptionsFactory = $this->getHandlerFactory($handlerOptions['type']);
+        $handlerFactory = $this->getHandlerFactory($handlerOptions['type']);
 
         $handlerOptions['path'] = ($this->pathResolver)($handlerOptions, $loggableOutput);
 
@@ -63,7 +63,7 @@ final class LoggableOutputConfigurator
          */
         $logger = clone $this->templateLogger;
 
-        $logger->pushHandler($handlerOptionsFactory($handlerOptions));
+        $logger->pushHandler($handlerFactory($handlerOptions));
 
         $loggableOutput->setOutputLogger($logger);
     }
