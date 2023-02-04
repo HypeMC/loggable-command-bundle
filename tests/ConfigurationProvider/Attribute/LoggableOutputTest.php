@@ -68,15 +68,13 @@ final class LoggableOutputTest extends TestCase
 
     public function testNullValuesAreFiltered(): void
     {
-        $options = (new LoggableOutput([], 'name', null, 'stream', null, true, null, 0775))
-            ->getOptions()
-        ;
+        $loggableOutput = new LoggableOutput([], 'name', null, 'stream', null, true, null, 0775);
 
         $this->assertSame([
             'filename' => 'name',
             'type' => 'stream',
             'bubble' => true,
             'file_permission' => 0775,
-        ], $options);
+        ], $loggableOutput->getOptions());
     }
 }
