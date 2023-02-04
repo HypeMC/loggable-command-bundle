@@ -31,6 +31,9 @@ return (new PhpCsFixer\Config())
                 OrderedImportsFixer::IMPORT_TYPE_CLASS,
             ],
         ],
+        'phpdoc_separation' => [
+            'groups' => [['Common\\*']],
+        ],
         'pow_to_exponentiation' => true,
         'single_line_throw' => false,
         'ternary_to_null_coalescing' => true,

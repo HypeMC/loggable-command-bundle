@@ -4,24 +4,26 @@ declare(strict_types=1);
 
 namespace Bizkit\LoggableCommandBundle\ConfigurationProvider\Attribute;
 
+use Doctrine\Common\Annotations\Annotation as Common;
+
 /**
  * Annotation class for @LoggableOutput.
  *
  * @Annotation
  *
- * @Target({"CLASS"})
- * @Attributes({
- *     @Attribute("filename", type="string"),
- *     @Attribute("path", type="string"),
- *     @Attribute("type", type="string"),
- *     @Attribute("bubble", type="bool"),
- *     @Attribute("includeStacktraces", type="bool"),
- *     @Attribute("filePermission", type="int"),
- *     @Attribute("useLocking", type="bool"),
- *     @Attribute("maxFiles", type="int"),
- *     @Attribute("filenameFormat", type="string"),
- *     @Attribute("dateFormat", type="string"),
- *     @Attribute("extraOptions", type="array"),
+ * @Common\Target({"CLASS"})
+ * @Common\Attributes({
+ *     @Common\Attribute("filename", type="string"),
+ *     @Common\Attribute("path", type="string"),
+ *     @Common\Attribute("type", type="string"),
+ *     @Common\Attribute("bubble", type="bool"),
+ *     @Common\Attribute("includeStacktraces", type="bool"),
+ *     @Common\Attribute("filePermission", type="int"),
+ *     @Common\Attribute("useLocking", type="bool"),
+ *     @Common\Attribute("maxFiles", type="int"),
+ *     @Common\Attribute("filenameFormat", type="string"),
+ *     @Common\Attribute("dateFormat", type="string"),
+ *     @Common\Attribute("extraOptions", type="array"),
  * })
  */
 #[\Attribute(\Attribute::TARGET_CLASS)]
