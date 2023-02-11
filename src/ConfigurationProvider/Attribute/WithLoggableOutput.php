@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Bizkit\LoggableCommandBundle\ConfigurationProvider\Attribute;
 
 #[\Attribute(\Attribute::TARGET_CLASS)]
-final class LoggableOutput
+final class WithLoggableOutput
 {
     public readonly array $options;
 

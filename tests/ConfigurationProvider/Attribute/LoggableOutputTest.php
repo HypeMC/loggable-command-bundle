@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace Bizkit\LoggableCommandBundle\Tests\ConfigurationProvider\Attribute;
 
-use Bizkit\LoggableCommandBundle\ConfigurationProvider\Attribute\LoggableOutput;
+use Bizkit\LoggableCommandBundle\ConfigurationProvider\Attribute\WithLoggableOutput;
 use Bizkit\LoggableCommandBundle\Tests\TestCase;
 
 /**
- * @covers \Bizkit\LoggableCommandBundle\ConfigurationProvider\Attribute\LoggableOutput
+ * @covers \Bizkit\LoggableCommandBundle\ConfigurationProvider\Attribute\WithLoggableOutput
  */
 final class LoggableOutputTest extends TestCase
 {
     public function testNullValuesAreFiltered(): void
     {
-        $loggableOutput = new LoggableOutput('name', null, 'stream', null, true, null, 0775);
+        $loggableOutput = new WithLoggableOutput('name', null, 'stream', null, true, null, 0775);
 
         $this->assertSame([
             'filename' => 'name',
