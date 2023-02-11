@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Bizkit\LoggableCommandBundle\ConfigurationProvider;
 
-use Bizkit\LoggableCommandBundle\ConfigurationProvider\Attribute\LoggableOutput;
+use Bizkit\LoggableCommandBundle\ConfigurationProvider\Attribute\WithLoggableOutput;
 use Bizkit\LoggableCommandBundle\LoggableOutput\LoggableOutputInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
 
@@ -21,13 +21,13 @@ final class AttributeConfigurationProvider extends AbstractConfigurationProvider
         $configuration = [];
 
         do {
-            $reflectionAttributes = $reflectionObject->getAttributes(LoggableOutput::class);
+            $reflectionAttributes = $reflectionObject->getAttributes(WithLoggableOutput::class);
 
             if (null === $reflectionAttribute = $reflectionAttributes[0] ?? null) {
                 continue;
             }
 
-            /** @var LoggableOutput $attribute */
+            /** @var WithLoggableOutput $attribute */
             $attribute = $reflectionAttribute->newInstance();
 
             $configuration = self::mergeConfigurations($configuration, $attribute->options);

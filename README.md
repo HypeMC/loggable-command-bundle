@@ -188,19 +188,19 @@ class MyMessageHandler implements MessageHandlerInterface, NamedLoggableOutputIn
 }
 ```
 
-### `#[LoggableOutput]` attribute
+### `#[WithLoggableOutput]` attribute
 
 The default configuration can be overridden for each individual command or message handler by using the
-`#[LoggableOutput]` attribute. Among other things, it allows you to change which Monolog file handler is used by the
+`#[WithLoggableOutput]` attribute. Among other things, it allows you to change which Monolog file handler is used by the
 output logger.
 
 ```php
 namespace App;
 
 use Bizkit\LoggableCommandBundle\Command\LoggableCommand;
-use Bizkit\LoggableCommandBundle\ConfigurationProvider\Attribute\LoggableOutput;
+use Bizkit\LoggableCommandBundle\ConfigurationProvider\Attribute\WithLoggableOutput;
 
-#[LoggableOutput(filename: 'my_custom_name', type: 'rotating_file')]
+#[WithLoggableOutput(filename: 'my_custom_name', type: 'rotating_file')]
 class MyLoggableCommand extends LoggableCommand
 {
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -216,12 +216,12 @@ implementing the `NamedLoggableOutputInterface` is not necessary.
 ```php
 namespace App;
 
-use Bizkit\LoggableCommandBundle\ConfigurationProvider\Attribute\LoggableOutput;
+use Bizkit\LoggableCommandBundle\ConfigurationProvider\Attribute\WithLoggableOutput;
 use Bizkit\LoggableCommandBundle\LoggableOutput\LoggableOutputInterface;
 use Bizkit\LoggableCommandBundle\LoggableOutput\LoggableOutputTrait;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 
-#[LoggableOutput(filename: 'my_log_name')]
+#[WithLoggableOutput(filename: 'my_log_name')]
 class MyMessageHandler implements MessageHandlerInterface, LoggableOutputInterface
 {
     use LoggableOutputTrait;
@@ -239,18 +239,18 @@ child class have the same option defined, the one from the child class has prece
 ```php
 namespace App;
 
-use Bizkit\LoggableCommandBundle\ConfigurationProvider\Attribute\LoggableOutput;
+use Bizkit\LoggableCommandBundle\ConfigurationProvider\Attribute\WithLoggableOutput;
 use Bizkit\LoggableCommandBundle\LoggableOutput\LoggableOutputInterface;
 use Bizkit\LoggableCommandBundle\LoggableOutput\LoggableOutputTrait;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 
-#[LoggableOutput(path: '%kernel.logs_dir%/messenger/{filename}.log')]
+#[WithLoggableOutput(path: '%kernel.logs_dir%/messenger/{filename}.log')]
 abstract class MyBaseMessageHandler implements MessageHandlerInterface, LoggableOutputInterface
 {
     use LoggableOutputTrait;
 }
 
-#[LoggableOutput(filename: 'my_log_name')]
+#[WithLoggableOutput(filename: 'my_log_name')]
 class MyMessageHandler extends MyBaseMessageHandler
 {
     public function __invoke(MyMessage $myMessage): void
