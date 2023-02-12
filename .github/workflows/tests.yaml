@@ -33,6 +33,10 @@ jobs:
                     ini-values: zend.exception_ignore_args=false
                     tools: flex
 
+            -   name: Remove Symfony Clock
+                if: ${{ matrix.symfony < 6.2 }}
+                run: composer remove --dev --no-update symfony/clock
+
             -   name: Install Dependencies
                 uses: ramsey/composer-install@v2
                 with:

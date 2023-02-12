@@ -6,11 +6,13 @@ namespace Bizkit\LoggableCommandBundle\PathResolver;
 
 use Bizkit\LoggableCommandBundle\FilenameProvider\FilenameProviderInterface;
 use Bizkit\LoggableCommandBundle\LoggableOutput\LoggableOutputInterface;
+use Psr\Clock\ClockInterface;
 
 final class DefaultPathResolver implements PathResolverInterface
 {
     public function __construct(
         private readonly FilenameProviderInterface $filenameProvider,
+        private readonly ?ClockInterface $clock = null,
     ) {
     }
 
@@ -24,7 +26,8 @@ final class DefaultPathResolver implements PathResolverInterface
         }
 
         if (str_contains($resolvedPath, '{date}')) {
-            $resolvedPath = strtr($resolvedPath, ['{date}' => date($handlerOptions['date_format'])]);
+            $date = $this->clock?->now()->format($handlerOptions['date_format']) ?? date($handlerOptions['date_format']);
+            $resolvedPath = strtr($resolvedPath, ['{date}' => $date]);
         }
 
         return $resolvedPath;
