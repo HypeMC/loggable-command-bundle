@@ -10,6 +10,7 @@ use Bizkit\LoggableCommandBundle\PathResolver\DefaultPathResolver;
 use Bizkit\LoggableCommandBundle\Tests\Fixtures\DummyLoggableOutput;
 use Bizkit\LoggableCommandBundle\Tests\TestCase;
 use Symfony\Bridge\PhpUnit\ClockMock;
+use Symfony\Component\Clock\MockClock;
 
 /**
  * @covers \Bizkit\LoggableCommandBundle\PathResolver\DefaultPathResolver
@@ -18,14 +19,28 @@ use Symfony\Bridge\PhpUnit\ClockMock;
  */
 final class DefaultPathResolverTest extends TestCase
 {
+    private const MOCK_TIME = 1612711778;
+
     /**
      * @dataProvider handlerOptions
      */
-    public function testLoggerIsConfiguredAsExpected(array $handlerOptions, string $resolvedPath): void
+    public function testLoggerIsConfiguredAsExpectedWithoutClock(array $handlerOptions, string $resolvedPath): void
     {
-        ClockMock::withClockMock(1612711778);
+        ClockMock::withClockMock(self::MOCK_TIME);
 
         $pathResolver = new DefaultPathResolver(new DefaultFilenameProvider());
+
+        $this->assertSame($resolvedPath, $pathResolver($handlerOptions, new DummyLoggableOutput()));
+    }
+
+    /**
+     * @requires function \Symfony\Component\Clock\MockClock::now
+     *
+     * @dataProvider handlerOptions
+     */
+    public function testLoggerIsConfiguredAsExpectedWithClock(array $handlerOptions, string $resolvedPath): void
+    {
+        $pathResolver = new DefaultPathResolver(new DefaultFilenameProvider(), new MockClock('@'.self::MOCK_TIME));
 
         $this->assertSame($resolvedPath, $pathResolver($handlerOptions, new DummyLoggableOutput()));
     }

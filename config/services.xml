@@ -51,6 +51,7 @@
 
         <service id="Bizkit\LoggableCommandBundle\PathResolver\DefaultPathResolver">
             <argument type="service" id="Bizkit\LoggableCommandBundle\FilenameProvider\FilenameProviderInterface" />
+            <argument type="service" id="Symfony\Component\Clock\ClockInterface" on-invalid="null" />
         </service>
 
         <service id="Bizkit\LoggableCommandBundle\PathResolver\PathResolverInterface"
