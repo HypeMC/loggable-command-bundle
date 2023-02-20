@@ -9,6 +9,7 @@ use Bizkit\LoggableCommandBundle\DependencyInjection\Compiler\ExcludeMonologChan
 use Symfony\Bundle\MonologBundle\DependencyInjection\Compiler\LoggerChannelPass;
 use Symfony\Bundle\MonologBundle\MonologBundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 
 /**
  * @covers \Bizkit\LoggableCommandBundle\BizkitLoggableCommandBundle
@@ -19,8 +20,10 @@ final class BizkitLoggableCommandBundleTest extends TestCase
     {
         $container = new ContainerBuilder();
 
-        (new MonologBundle())->build($container);
-        (new BizkitLoggableCommandBundle())->build($container);
+        /** @var BundleInterface $bundle */
+        foreach ([new MonologBundle(), new BizkitLoggableCommandBundle()] as $bundle) {
+            $bundle->build($container);
+        }
 
         $compilerPassIndexes = [];
         foreach ($container->getCompilerPassConfig()->getBeforeOptimizationPasses() as $i => $compilerPass) {
