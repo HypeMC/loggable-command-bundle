@@ -16,25 +16,27 @@ final class ExcludeMonologChannelPassTest extends TestCase
     /**
      * @dataProvider handlerChannels
      */
-    public function testChannelIsExcludedWhenExpected(string $type, array $elements, array $expectedElements): void
+    public function testChannelIsExcludedWhenExpected(?array $channels, array $expectedChannels, array $expectedLog): void
     {
         $container = new ContainerBuilder();
         $container->setParameter('bizkit_loggable_command.channel_name', 'channel_name');
-        $container->setParameter('monolog.handlers_to_channels', [
-            'foobar' => ['type' => $type, 'elements' => $elements],
-        ]);
+        $container->setParameter('monolog.handlers_to_channels', ['monolog.handler.foobar' => $channels]);
 
         (new ExcludeMonologChannelPass())->process($container);
 
-        /** @var array<string, array{type: string, elements: list<string>}> $actualElements */
-        $actualElements = $container->getParameter('monolog.handlers_to_channels');
-        $this->assertSame($expectedElements, $actualElements['foobar']['elements']);
+        /** @var array<string, array{type: string, elements: list<string>}> $handlersToChannels */
+        $handlersToChannels = $container->getParameter('monolog.handlers_to_channels');
+        $this->assertSame($expectedChannels, $handlersToChannels['monolog.handler.foobar']['elements']);
+
+        $this->assertSame($expectedLog, $container->getCompiler()->getLog());
     }
 
     public function handlerChannels(): iterable
     {
-        yield 'Inclusive' => ['inclusive', ['foo', 'bar', 'baz'], ['foo', 'bar', 'baz']];
-        yield 'Exclusive without exception' => ['exclusive', ['foo', 'baz'], ['foo', 'baz', 'channel_name']];
-        yield 'Exclusive with exception' => ['exclusive', ['foo', '!channel_name', 'baz'], ['foo', 'baz']];
+        $log = sprintf('%s: Excluded Monolog channel "channel_name" from the following exclusive handlers "foobar".', ExcludeMonologChannelPass::class);
+
+        yield 'Inclusive' => [['type' => 'inclusive', 'elements' => ['foo', 'bar', 'baz']], ['foo', 'bar', 'baz'], []];
+        yield 'Exclusive without exception' => [['type' => 'exclusive', 'elements' => ['foo', 'baz']], ['foo', 'baz', 'channel_name'], [$log]];
+        yield 'Exclusive with exception' => [['type' => 'exclusive', 'elements' => ['foo', '!channel_name', 'baz']], ['foo', 'baz'], []];
     }
 }

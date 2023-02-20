@@ -35,10 +35,12 @@ final class ExcludeMonologChannelPass implements CompilerPassInterface
         }
         $container->setParameter('monolog.handlers_to_channels', $handlersToChannels);
 
-        $container->log($this, sprintf(
-            'Excluded Monolog channel "%s" from the following exclusive handlers "%s".',
-            $monologChannelName,
-            implode('", "', $exclusiveHandlerNames)
-        ));
+        if ($exclusiveHandlerNames) {
+            $container->log($this, sprintf(
+                'Excluded Monolog channel "%s" from the following exclusive handlers "%s".',
+                $monologChannelName,
+                implode('", "', $exclusiveHandlerNames)
+            ));
+        }
     }
 }
