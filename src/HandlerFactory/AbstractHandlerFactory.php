@@ -35,16 +35,14 @@ abstract class AbstractHandlerFactory implements HandlerFactoryInterface
 
         if (
             null !== $this->psrLogMessageProcessor
-            &&
-            ($handler instanceof ProcessableHandlerInterface || method_exists(HandlerInterface::class, 'pushProcessor'))
+            && ($handler instanceof ProcessableHandlerInterface || method_exists(HandlerInterface::class, 'pushProcessor'))
         ) {
             $handler->pushProcessor($this->psrLogMessageProcessor);
         }
 
         if (
             null !== $this->formatter
-            &&
-            ($handler instanceof FormattableHandlerInterface || method_exists(HandlerInterface::class, 'setFormatter'))
+            && ($handler instanceof FormattableHandlerInterface || method_exists(HandlerInterface::class, 'setFormatter'))
         ) {
             $handler->setFormatter($this->formatter);
         }

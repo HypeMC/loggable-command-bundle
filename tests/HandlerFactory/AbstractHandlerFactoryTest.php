@@ -33,8 +33,7 @@ final class AbstractHandlerFactoryTest extends TestCase
     {
         if (
             method_exists(HandlerInterface::class, 'pushProcessor')
-            ||
-            method_exists(HandlerInterface::class, 'setFormatter')
+            || method_exists(HandlerInterface::class, 'setFormatter')
         ) {
             $this->markTestSkipped('Monolog >= 2.0 is required.');
         }

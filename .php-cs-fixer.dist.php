@@ -37,6 +37,9 @@ return (new PhpCsFixer\Config())
         'pow_to_exponentiation' => true,
         'single_line_throw' => false,
         'ternary_to_null_coalescing' => true,
+        // PHP 7 compatibility
+        'get_class_to_class_keyword' => false,
+        'modernize_strpos' => false,
     ])
     ->setRiskyAllowed(true)
     ->setFinder($finder)
