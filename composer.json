@@ -29,7 +29,7 @@
         "symfony/monolog-bundle": "^3.4"
     },
     "require-dev": {
-        "doctrine/annotations": "^1.10.4",
+        "doctrine/annotations": "^1.10.4 || ^2",
         "symfony/phpunit-bridge": "^6.1"
     },
     "conflict": {
