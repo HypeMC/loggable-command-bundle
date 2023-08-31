@@ -93,5 +93,10 @@
         "location": "Bizkit\\LoggableCommandBundle\\Tests\\FilenameProvider\\DefaultFilenameProviderTest::testNameFromCommandName",
         "message": "The \"Symfony\\Component\\Console\\Command\\Command::$defaultName\" property is considered final. You should not override it in \"Bizkit\\LoggableCommandBundle\\Tests\\FilenameProvider\\Fixtures\\DummyLoggableCommand\".",
         "count": 1
+    },
+    {
+        "location": "Bizkit\\LoggableCommandBundle\\Tests\\FilenameProvider\\Fixtures\\DummyLoggableCommand",
+        "message": "The \"Symfony\\Component\\Console\\Command\\Command::$defaultName\" property is considered final. You should not override it in \"Bizkit\\LoggableCommandBundle\\Tests\\FilenameProvider\\Fixtures\\DummyLoggableCommand\".",
+        "count": 1
     }
 ]
