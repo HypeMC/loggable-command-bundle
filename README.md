@@ -75,11 +75,11 @@ Symfony bundle which creates a dedicated Monolog log file for each command or me
             date_format:          Y-m-d
 
             # Extra options that can be used in custom handler factories.
-            extra_options:
+            extra_options:        []
 
                 # Examples:
-                my_option1:          'some value'
-                my_option2:          true
+                # my_option1:          'some value'
+                # my_option2:          true
 
             # Enables configuring services with the use of an annotation, requires the Doctrine Annotation library.
             enable_annotations:   false
@@ -88,9 +88,9 @@ Symfony bundle which creates a dedicated Monolog log file for each command or me
         process_psr_3_messages:
 
             # Examples:
-            - false
-            - { enabled: false }
-            - { date_format: Y-m-d, remove_used_context_fields: true }
+            # - false
+            # - { enabled: false }
+            # - { date_format: Y-m-d, remove_used_context_fields: true }
             enabled:              true
             date_format:          ~
             remove_used_context_fields: ~
