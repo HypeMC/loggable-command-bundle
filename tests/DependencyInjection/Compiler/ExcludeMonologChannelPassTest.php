@@ -57,7 +57,7 @@ final class ExcludeMonologChannelPassTest extends TestCase
 
     public function handlerChannels(): iterable
     {
-        $log = sprintf('%s: Excluded Monolog channel "loggable_output" from the following exclusive handlers "foobar".', ExcludeMonologChannelPass::class);
+        $log = \sprintf('%s: Excluded Monolog channel "loggable_output" from the following exclusive handlers "foobar".', ExcludeMonologChannelPass::class);
 
         yield 'None' => [null, ['type' => 'exclusive', 'elements' => ['loggable_output']], [$log]];
         yield 'Empty array' => [[], ['type' => 'exclusive', 'elements' => ['loggable_output']], [$log]];

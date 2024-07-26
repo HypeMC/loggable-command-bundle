@@ -80,7 +80,7 @@ final class LoggableOutput
     private static function validateLevel($level): void
     {
         if (isset($level) && !(\is_string($level) || \is_int($level))) {
-            throw new \TypeError(sprintf(
+            throw new \TypeError(\sprintf(
                 '%s::__construct: Level must be a string or an integer, "%s" given.',
                 __CLASS__,
                 \is_object($level) ? \get_class($level) : \gettype($level)

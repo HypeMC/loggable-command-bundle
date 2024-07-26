@@ -72,7 +72,7 @@ final class LoggableOutputConfigurator
     {
         if (!$this->handlerFactoryLocator->has($handlerType)) {
             throw new \RuntimeException(
-                sprintf('The handler factory "%s" is not registered in the handler factory locator.', $handlerType)
+                \sprintf('The handler factory "%s" is not registered in the handler factory locator.', $handlerType)
             );
         }
 

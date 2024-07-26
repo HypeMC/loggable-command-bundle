@@ -120,7 +120,7 @@ final class BizkitLoggableCommandExtension extends ConfigurableExtension impleme
 
         $container
             ->getDefinition(LoggableOutputConfigurator::class)
-            ->replaceArgument(2, new Reference(sprintf('monolog.logger.%s', $mergedConfig['channel_name'])))
+            ->replaceArgument(2, new Reference(\sprintf('monolog.logger.%s', $mergedConfig['channel_name'])))
         ;
     }
 
