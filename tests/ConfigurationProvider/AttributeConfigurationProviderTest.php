@@ -32,7 +32,7 @@ final class AttributeConfigurationProviderTest extends TestCase
             $this->createContainerBagWithResolveValueMethodCalled($handlerOptions)
         );
 
-        $this->assertSame(
+        self::assertSame(
             $handlerOptions,
             $provider(new DummyLoggableOutputWithAttribute())
         );
@@ -46,7 +46,7 @@ final class AttributeConfigurationProviderTest extends TestCase
             $this->createContainerBagWithResolveValueMethodCalled($handlerOptions)
         );
 
-        $this->assertSame(
+        self::assertSame(
             $handlerOptions,
             $provider(new DummyChildLoggableOutputWithAttribute())
         );
@@ -60,7 +60,7 @@ final class AttributeConfigurationProviderTest extends TestCase
             $this->createContainerBagWithResolveValueMethodCalled($handlerOptions)
         );
 
-        $this->assertSame(
+        self::assertSame(
             $handlerOptions,
             $provider(new DummyChildLoggableOutputWithParentAttribute())
         );
@@ -72,7 +72,7 @@ final class AttributeConfigurationProviderTest extends TestCase
             $this->createContainerBagWithoutResolveValueMethodCalled()
         );
 
-        $this->assertSame([], $provider(new DummyLoggableOutput()));
+        self::assertSame([], $provider(new DummyLoggableOutput()));
     }
 
     public function testProviderResolvesConfigParameters(): void
@@ -85,7 +85,7 @@ final class AttributeConfigurationProviderTest extends TestCase
 
         $container->setParameter('kernel.logs_dir', '/var/log');
 
-        $this->assertSame(
+        self::assertSame(
             $handlerOptions,
             $provider(new DummyLoggableOutputWithAttributeAndParam())
         );
@@ -99,10 +99,10 @@ final class AttributeConfigurationProviderTest extends TestCase
     private function createContainerBagWithResolveValueMethodCalled(array $handlerOptions): ContainerBagInterface
     {
         $containerBag = $this->createMock(ContainerBagInterface::class);
-        $containerBag->expects($this->once())
+        $containerBag->expects(self::once())
             ->method('resolveValue')
             ->with($handlerOptions)
-            ->willReturn($this->returnArgument(0))
+            ->willReturn(self::returnArgument(0))
         ;
 
         return $containerBag;
@@ -111,7 +111,7 @@ final class AttributeConfigurationProviderTest extends TestCase
     private function createContainerBagWithoutResolveValueMethodCalled(): ContainerBagInterface
     {
         $containerBag = $this->createMock(ContainerBagInterface::class);
-        $containerBag->expects($this->never())->method('resolveValue');
+        $containerBag->expects(self::never())->method('resolveValue');
 
         return $containerBag;
     }

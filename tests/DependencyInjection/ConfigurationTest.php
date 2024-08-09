@@ -17,7 +17,7 @@ final class ConfigurationTest extends TestCase
     {
         $config = (new Processor())->processConfiguration(new Configuration(), ['bizkit_loggable_command' => []]);
 
-        $this->assertSame([
+        self::assertSame([
             'channel_name' => 'loggable_output',
             'console_handler_options' => [
                 'stderr_threshold' => 'ERROR',
@@ -57,8 +57,8 @@ final class ConfigurationTest extends TestCase
             ],
         ]);
 
-        $this->assertArrayHasKey('process_psr_3_messages', $config);
-        $this->assertSame([
+        self::assertArrayHasKey('process_psr_3_messages', $config);
+        self::assertSame([
             'enabled' => true,
         ], $config['process_psr_3_messages']);
     }
@@ -71,8 +71,8 @@ final class ConfigurationTest extends TestCase
             ],
         ]);
 
-        $this->assertArrayHasKey('process_psr_3_messages', $config);
-        $this->assertSame([
+        self::assertArrayHasKey('process_psr_3_messages', $config);
+        self::assertSame([
             'enabled' => false,
         ], $config['process_psr_3_messages']);
     }
@@ -87,8 +87,8 @@ final class ConfigurationTest extends TestCase
             ],
         ]);
 
-        $this->assertArrayHasKey('process_psr_3_messages', $config);
-        $this->assertSame([
+        self::assertArrayHasKey('process_psr_3_messages', $config);
+        self::assertSame([
             'date_format' => 'Y-m-d',
             'enabled' => true,
         ], $config['process_psr_3_messages']);

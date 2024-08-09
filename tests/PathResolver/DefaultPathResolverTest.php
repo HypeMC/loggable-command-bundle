@@ -27,10 +27,10 @@ final class DefaultPathResolverTest extends TestCase
 
         $pathResolver = new DefaultPathResolver(new DefaultFilenameProvider());
 
-        $this->assertSame($resolvedPath, $pathResolver($handlerOptions, new DummyLoggableOutput()));
+        self::assertSame($resolvedPath, $pathResolver($handlerOptions, new DummyLoggableOutput()));
     }
 
-    public function handlerOptions(): iterable
+    public static function handlerOptions(): iterable
     {
         yield 'Filename & date' => [[
             'path' => 'log/console/{filename}-{date}.log',
@@ -64,10 +64,10 @@ final class DefaultPathResolverTest extends TestCase
         ];
 
         $filenameProvider = $this->createMock(FilenameProviderInterface::class);
-        $filenameProvider->expects($this->never())->method('__invoke');
+        $filenameProvider->expects(self::never())->method('__invoke');
 
         $pathResolver = new DefaultPathResolver($filenameProvider);
 
-        $this->assertSame('log/console/dummy-filename.log', $pathResolver($handlerOptions, new DummyLoggableOutput()));
+        self::assertSame('log/console/dummy-filename.log', $pathResolver($handlerOptions, new DummyLoggableOutput()));
     }
 }

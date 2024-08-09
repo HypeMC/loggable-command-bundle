@@ -32,7 +32,7 @@ final class MergedConfigurationProviderTest extends TestCase
             ]]
         );
 
-        $this->assertSame(
+        self::assertSame(
             ['filename' => 'annotation-test', 'level' => LogLevel::CRITICAL, 'max_files' => 4, 'bubble' => true, 'extra_options' => [
                 'foo' => 'one',
                 'bar' => 'two',
@@ -50,7 +50,7 @@ final class MergedConfigurationProviderTest extends TestCase
 
         foreach ($handlerOptionsGroups as $handlerOptions) {
             $handler = $this->createMock(ConfigurationProviderInterface::class);
-            $handler->expects($this->once())
+            $handler->expects(self::once())
                 ->method('__invoke')
                 ->with($loggableOutput)
                 ->willReturn($handlerOptions)

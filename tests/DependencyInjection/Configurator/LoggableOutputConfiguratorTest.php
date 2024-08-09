@@ -32,7 +32,7 @@ final class LoggableOutputConfiguratorTest extends TestCase
 
         $configurationProvider = $this->createMock(ConfigurationProviderInterface::class);
         $configurationProvider
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('__invoke')
             ->with($loggableOutput)
             ->willReturn($handlerOptions)
@@ -40,7 +40,7 @@ final class LoggableOutputConfiguratorTest extends TestCase
 
         $pathResolver = $this->createMock(PathResolverInterface::class);
         $pathResolver
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('__invoke')
             ->with($handlerOptions, $loggableOutput)
             ->willReturn($resolvedPath)
@@ -62,16 +62,16 @@ final class LoggableOutputConfiguratorTest extends TestCase
         /** @var Logger $logger */
         $logger = $loggableOutput->getOutputLogger();
 
-        $this->assertNotSame($templateLogger, $logger);
+        self::assertNotSame($templateLogger, $logger);
 
-        $this->assertCount(0, $templateLogger->getHandlers());
-        $this->assertCount(1, $logger->getHandlers());
+        self::assertCount(0, $templateLogger->getHandlers());
+        self::assertCount(1, $logger->getHandlers());
 
         /** @var DummyHandler $handler */
         $handler = $logger->popHandler();
 
-        $this->assertInstanceOf(DummyHandler::class, $handler);
-        $this->assertSame($resolvedPath, $handler->getHandlerOptions()['path']);
+        self::assertInstanceOf(DummyHandler::class, $handler);
+        self::assertSame($resolvedPath, $handler->getHandlerOptions()['path']);
     }
 
     public function testExceptionIsThrownIfHandlerFactoryIsNotRegistered(): void
@@ -81,7 +81,7 @@ final class LoggableOutputConfiguratorTest extends TestCase
         ];
 
         $pathResolver = $this->createMock(PathResolverInterface::class);
-        $pathResolver->expects($this->never())->method('__invoke');
+        $pathResolver->expects(self::never())->method('__invoke');
 
         $templateLogger = $this->getMockBuilder(Logger::class)
             ->disableOriginalConstructor()
@@ -89,8 +89,8 @@ final class LoggableOutputConfiguratorTest extends TestCase
             ->addMethods(['__clone'])
             ->getMock()
         ;
-        $templateLogger->expects($this->never())->method('__clone');
-        $templateLogger->expects($this->never())->method('pushHandler');
+        $templateLogger->expects(self::never())->method('__clone');
+        $templateLogger->expects(self::never())->method('pushHandler');
 
         $configurator = new LoggableOutputConfigurator(
             new DefaultConfigurationProvider($handlerOptions),

@@ -45,9 +45,9 @@ final class ExcludeMonologChannelPassTest extends TestCase
 
         /** @var array<string, array{type: string, elements: list<string>}|null> $handlersToChannels */
         $handlersToChannels = $container->getParameter('monolog.handlers_to_channels');
-        $this->assertSame($expectedChannels, $handlersToChannels['monolog.handler.foobar']);
+        self::assertSame($expectedChannels, $handlersToChannels['monolog.handler.foobar']);
 
-        $this->assertSame($expectedLog, array_values(array_filter(
+        self::assertSame($expectedLog, array_values(array_filter(
             $container->getCompiler()->getLog(),
             function (string $log): bool {
                 return 0 === strpos($log, ExcludeMonologChannelPass::class);
@@ -55,7 +55,7 @@ final class ExcludeMonologChannelPassTest extends TestCase
         )));
     }
 
-    public function handlerChannels(): iterable
+    public static function handlerChannels(): iterable
     {
         $log = \sprintf('%s: Excluded Monolog channel "loggable_output" from the following exclusive handlers "foobar".', ExcludeMonologChannelPass::class);
 

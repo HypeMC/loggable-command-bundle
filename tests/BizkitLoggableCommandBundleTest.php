@@ -30,10 +30,10 @@ final class BizkitLoggableCommandBundleTest extends TestCase
             $compilerPassIndexes[\get_class($compilerPass)] = $i;
         }
 
-        $this->assertArrayHasKey(LoggerChannelPass::class, $compilerPassIndexes);
-        $this->assertArrayHasKey(ExcludeMonologChannelPass::class, $compilerPassIndexes);
+        self::assertArrayHasKey(LoggerChannelPass::class, $compilerPassIndexes);
+        self::assertArrayHasKey(ExcludeMonologChannelPass::class, $compilerPassIndexes);
 
-        $this->assertGreaterThan(
+        self::assertGreaterThan(
             $compilerPassIndexes[ExcludeMonologChannelPass::class],
             $compilerPassIndexes[LoggerChannelPass::class]
         );

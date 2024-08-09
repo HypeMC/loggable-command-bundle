@@ -35,10 +35,10 @@ final class AbstractConfigurationProviderTest extends TestCase
             }
         };
 
-        $this->assertSame($mergedConfig, $configurationProvider(new DummyLoggableOutput()));
+        self::assertSame($mergedConfig, $configurationProvider(new DummyLoggableOutput()));
     }
 
-    public function configurationsToMerge(): iterable
+    public static function configurationsToMerge(): iterable
     {
         yield 'Extra options in none' => [
             ['opt1' => 'opt1val', 'opt2' => 'opt2val'],

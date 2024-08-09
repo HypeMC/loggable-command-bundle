@@ -20,7 +20,7 @@ final class DefaultConfigurationProviderTest extends TestCase
 
         $provider = $this->createConfigurationProvider($handlerOptions);
 
-        $this->assertSame($handlerOptions, $provider(new DummyLoggableOutput()));
+        self::assertSame($handlerOptions, $provider(new DummyLoggableOutput()));
     }
 
     private function createConfigurationProvider(array $handlerOptions): ConfigurationProviderInterface

@@ -59,8 +59,8 @@ final class BizkitLoggableCommandExtensionTest extends TestCase
 
         $monologConfig = $container->getExtensionConfig('monolog');
 
-        $this->assertCount(1, $monologConfig);
-        $this->assertSame([
+        self::assertCount(1, $monologConfig);
+        self::assertSame([
             'channels' => ['foo_channel'],
             'handlers' => [
                 $loggableCommandExtensionAlias => [
@@ -82,7 +82,7 @@ final class BizkitLoggableCommandExtensionTest extends TestCase
 
         $loggableCommandExtension->load([], $container);
 
-        $this->assertFalse($container->hasDefinition(AttributeConfigurationProvider::class));
+        self::assertFalse($container->hasDefinition(AttributeConfigurationProvider::class));
     }
 
     /**
@@ -95,7 +95,7 @@ final class BizkitLoggableCommandExtensionTest extends TestCase
 
         $loggableCommandExtension->load([], $container);
 
-        $this->assertTrue($container->hasDefinition(AttributeConfigurationProvider::class));
+        self::assertTrue($container->hasDefinition(AttributeConfigurationProvider::class));
     }
 
     public function testAnnotationConfigurationProviderIsRemovedWhenDisabled(): void
@@ -109,13 +109,13 @@ final class BizkitLoggableCommandExtensionTest extends TestCase
             ],
         ]], $container);
 
-        $this->assertFalse($container->hasDefinition(AnnotationConfigurationProvider::class));
+        self::assertFalse($container->hasDefinition(AnnotationConfigurationProvider::class));
     }
 
     public function testAnnotationConfigurationProviderIsNotRemovedWhenEnabled(): void
     {
         if (!class_exists(Annotation::class)) {
-            $this->markTestSkipped('Doctrine Annotation library is required.');
+            self::markTestSkipped('Doctrine Annotation library is required.');
         }
 
         $container = new ContainerBuilder();
@@ -127,13 +127,13 @@ final class BizkitLoggableCommandExtensionTest extends TestCase
             ],
         ]], $container);
 
-        $this->assertTrue($container->hasDefinition(AnnotationConfigurationProvider::class));
+        self::assertTrue($container->hasDefinition(AnnotationConfigurationProvider::class));
     }
 
     public function testExceptionIsThrownWhenAnnotationConfigurationProviderIsEnabledAndAnnotationsAreNotInstalled(): void
     {
         if (class_exists(Annotation::class)) {
-            $this->markTestSkipped('Doctrine Annotation library mustn\'t be installed.');
+            self::markTestSkipped('Doctrine Annotation library mustn\'t be installed.');
         }
 
         $container = new ContainerBuilder();
@@ -157,8 +157,8 @@ final class BizkitLoggableCommandExtensionTest extends TestCase
             'channel_name' => 'foo_channel',
         ]], $container);
 
-        $this->assertTrue($container->hasParameter('bizkit_loggable_command.channel_name'));
-        $this->assertSame('foo_channel', $container->getParameter('bizkit_loggable_command.channel_name'));
+        self::assertTrue($container->hasParameter('bizkit_loggable_command.channel_name'));
+        self::assertSame('foo_channel', $container->getParameter('bizkit_loggable_command.channel_name'));
     }
 
     public function testArgumentsAreReplacedAsExpected(): void
@@ -180,13 +180,13 @@ final class BizkitLoggableCommandExtensionTest extends TestCase
 
         $definition = $container->getDefinition(ConsoleHandler::class);
 
-        $this->assertTrue($definition->hasMethodCall('setStdErrThreshold'));
+        self::assertTrue($definition->hasMethodCall('setStdErrThreshold'));
         $methodCalls = array_column($definition->getMethodCalls(), 1, 0);
-        $this->assertSame([Logger::toMonologLevel(LogLevel::CRITICAL)], $methodCalls['setStdErrThreshold']);
+        self::assertSame([Logger::toMonologLevel(LogLevel::CRITICAL)], $methodCalls['setStdErrThreshold']);
 
         $definition = $container->getDefinition((string) $definition->getArgument(0));
 
-        $this->assertFalse($definition->getArgument(1));
+        self::assertFalse($definition->getArgument(1));
 
         $expectedVerbosityLevels = array_map(static function (string $level): int {
             /** @var int|Level $level */
@@ -200,21 +200,21 @@ final class BizkitLoggableCommandExtensionTest extends TestCase
             OutputInterface::VERBOSITY_VERY_VERBOSE => LogLevel::INFO,
             OutputInterface::VERBOSITY_DEBUG => LogLevel::DEBUG,
         ]);
-        $this->assertSame($expectedVerbosityLevels, $definition->getArgument(2));
+        self::assertSame($expectedVerbosityLevels, $definition->getArgument(2));
 
-        $this->assertSame([
+        self::assertSame([
             'format' => "[%%datetime%%] %%start_tag%%%%level_name%%%%end_tag%% %%message%%\n",
         ], $definition->getArgument(3));
 
         $argument = $container->getDefinition(DefaultConfigurationProvider::class)->getArgument(0);
-        $this->assertIsArray($argument);
-        $this->assertArrayHasKey('path', $argument);
-        $this->assertArrayHasKey('level', $argument);
-        $this->assertArrayHasKey('bubble', $argument);
+        self::assertIsArray($argument);
+        self::assertArrayHasKey('path', $argument);
+        self::assertArrayHasKey('level', $argument);
+        self::assertArrayHasKey('bubble', $argument);
 
         $argument = $container->getDefinition(LoggableOutputConfigurator::class)->getArgument(2);
-        $this->assertInstanceOf(Reference::class, $argument);
-        $this->assertSame('monolog.logger.foo_channel', (string) $argument);
+        self::assertInstanceOf(Reference::class, $argument);
+        self::assertSame('monolog.logger.foo_channel', (string) $argument);
     }
 
     public function testConsoleHandlerCanBeInstantiated(): void
@@ -239,7 +239,7 @@ final class BizkitLoggableCommandExtensionTest extends TestCase
         $container->getDefinition(ConsoleHandler::class)->setPublic(true);
         $container->compile();
 
-        $this->assertInstanceOf(ConsoleHandler::class, $container->get(ConsoleHandler::class));
+        self::assertInstanceOf(ConsoleHandler::class, $container->get(ConsoleHandler::class));
     }
 
     public function testAutoconfigurationIsRegistered(): void
@@ -264,8 +264,8 @@ final class BizkitLoggableCommandExtensionTest extends TestCase
         (new ResolveInstanceofConditionalsPass())->process($container);
 
         foreach ($autoconfiguredInstanceofServices as $autoconfiguredInstanceofService => $tag) {
-            $this->assertTrue($container->hasDefinition($autoconfiguredInstanceofService));
-            $this->assertTrue($container->getDefinition($autoconfiguredInstanceofService)->hasTag($tag));
+            self::assertTrue($container->hasDefinition($autoconfiguredInstanceofService));
+            self::assertTrue($container->getDefinition($autoconfiguredInstanceofService)->hasTag($tag));
         }
     }
 
@@ -278,8 +278,8 @@ final class BizkitLoggableCommandExtensionTest extends TestCase
 
         $loggableCommandExtension->load([], $container);
 
-        $this->assertFalse($container->hasAlias('bizkit_loggable_command.formatter.console'));
-        $this->assertFalse($container->hasAlias('bizkit_loggable_command.formatter.file'));
+        self::assertFalse($container->hasAlias('bizkit_loggable_command.formatter.console'));
+        self::assertFalse($container->hasAlias('bizkit_loggable_command.formatter.file'));
     }
 
     public function testFormatterAliasesAreRegisteredWhenFormattersAreConfigured(): void
@@ -298,8 +298,8 @@ final class BizkitLoggableCommandExtensionTest extends TestCase
             ],
         ]], $container);
 
-        $this->assertTrue($container->hasAlias('bizkit_loggable_command.formatter.console'));
-        $this->assertTrue($container->hasAlias('bizkit_loggable_command.formatter.file'));
+        self::assertTrue($container->hasAlias('bizkit_loggable_command.formatter.console'));
+        self::assertTrue($container->hasAlias('bizkit_loggable_command.formatter.file'));
     }
 
     public function testConfiguratorIsSetToLoggableOutputServices(): void
@@ -313,9 +313,9 @@ final class BizkitLoggableCommandExtensionTest extends TestCase
         $loggableCommandExtension->process($container);
 
         $configurator = $container->getDefinition(DummyLoggableOutput::class)->getConfigurator();
-        $this->assertIsArray($configurator);
-        $this->assertArrayHasKey(0, $configurator);
-        $this->assertSame(LoggableOutputConfigurator::class, (string) $configurator[0]);
+        self::assertIsArray($configurator);
+        self::assertArrayHasKey(0, $configurator);
+        self::assertSame(LoggableOutputConfigurator::class, (string) $configurator[0]);
     }
 
     public function testPsrLogMessageProcessorIsNotRegisteredWhenFalse(): void
@@ -328,7 +328,7 @@ final class BizkitLoggableCommandExtensionTest extends TestCase
         ]], $container);
         $loggableCommandExtension->process($container);
 
-        $this->assertFalse($container->hasDefinition('bizkit_loggable_command.processor.psr_log_message'));
+        self::assertFalse($container->hasDefinition('bizkit_loggable_command.processor.psr_log_message'));
     }
 
     public function testPsrLogMessageProcessorIsRegisteredWhenTrueAndMonologServiceDoesNotExist(): void
@@ -341,8 +341,8 @@ final class BizkitLoggableCommandExtensionTest extends TestCase
         ]], $container);
         $loggableCommandExtension->process($container);
 
-        $this->assertTrue($container->hasDefinition('bizkit_loggable_command.processor.psr_log_message'));
-        $this->assertFalse($container->hasAlias('bizkit_loggable_command.processor.psr_log_message'));
+        self::assertTrue($container->hasDefinition('bizkit_loggable_command.processor.psr_log_message'));
+        self::assertFalse($container->hasAlias('bizkit_loggable_command.processor.psr_log_message'));
     }
 
     public function testPsrLogMessageProcessorIsAliasedWhenTrueAndMonologServiceExists(): void
@@ -357,14 +357,14 @@ final class BizkitLoggableCommandExtensionTest extends TestCase
         ]], $container);
         $loggableCommandExtension->process($container);
 
-        $this->assertFalse($container->hasDefinition('bizkit_loggable_command.processor.psr_log_message'));
-        $this->assertTrue($container->hasAlias('bizkit_loggable_command.processor.psr_log_message'));
+        self::assertFalse($container->hasDefinition('bizkit_loggable_command.processor.psr_log_message'));
+        self::assertTrue($container->hasAlias('bizkit_loggable_command.processor.psr_log_message'));
     }
 
     public function testExceptionIsThrownWhenPsrLogMessageProcessorDoesNotHaveConstructorArguments(): void
     {
         if ($this->psrLogMessageProcessorHasConstructorArguments()) {
-            $this->markTestSkipped('Monolog < 1.26 is needed.');
+            self::markTestSkipped('Monolog < 1.26 is needed.');
         }
 
         $container = new ContainerBuilder();
@@ -387,7 +387,7 @@ final class BizkitLoggableCommandExtensionTest extends TestCase
     public function testPsrLogMessageProcessorIsRegisteredWhenTrueWithArgumentsAndMonologServiceDoesNotExist(): void
     {
         if (!$this->psrLogMessageProcessorHasConstructorArguments()) {
-            $this->markTestSkipped('Monolog >= 1.26 is needed.');
+            self::markTestSkipped('Monolog >= 1.26 is needed.');
         }
 
         $container = new ContainerBuilder();
@@ -406,14 +406,14 @@ final class BizkitLoggableCommandExtensionTest extends TestCase
         ]], $container);
         $loggableCommandExtension->process($container);
 
-        $this->assertTrue($container->hasDefinition('bizkit_loggable_command.processor.psr_log_message'));
-        $this->assertFalse($container->hasAlias('bizkit_loggable_command.processor.psr_log_message'));
+        self::assertTrue($container->hasDefinition('bizkit_loggable_command.processor.psr_log_message'));
+        self::assertFalse($container->hasAlias('bizkit_loggable_command.processor.psr_log_message'));
     }
 
     public function testPsrLogMessageProcessorIsAliasedWhenTrueWithArgumentsAndMonologServiceExists(): void
     {
         if (!$this->psrLogMessageProcessorHasConstructorArguments()) {
-            $this->markTestSkipped('Monolog >= 1.26 is needed.');
+            self::markTestSkipped('Monolog >= 1.26 is needed.');
         }
 
         $container = new ContainerBuilder();
@@ -432,8 +432,8 @@ final class BizkitLoggableCommandExtensionTest extends TestCase
         ]], $container);
         $loggableCommandExtension->process($container);
 
-        $this->assertFalse($container->hasDefinition('bizkit_loggable_command.processor.psr_log_message'));
-        $this->assertTrue($container->hasAlias('bizkit_loggable_command.processor.psr_log_message'));
+        self::assertFalse($container->hasDefinition('bizkit_loggable_command.processor.psr_log_message'));
+        self::assertTrue($container->hasAlias('bizkit_loggable_command.processor.psr_log_message'));
     }
 
     private function psrLogMessageProcessorHasConstructorArguments(): bool

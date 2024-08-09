@@ -21,28 +21,28 @@ final class DefaultFilenameProviderTest extends TestCase
     {
         $filenameProvider = new DefaultFilenameProvider();
 
-        $this->assertSame('some_custom_name', $filenameProvider(new DummyNamedLoggableOutput()));
+        self::assertSame('some_custom_name', $filenameProvider(new DummyNamedLoggableOutput()));
     }
 
     public function testNameFromCommandName(): void
     {
         $filenameProvider = new DefaultFilenameProvider();
 
-        $this->assertSame('the_command_name', $filenameProvider(new DummyLoggableCommand()));
+        self::assertSame('the_command_name', $filenameProvider(new DummyLoggableCommand()));
     }
 
     public function testNamedLoggableOutputHasPrecedenceOverCommandName(): void
     {
         $filenameProvider = new DefaultFilenameProvider();
 
-        $this->assertSame('this_has_precedence', $filenameProvider(new DummyNamedLoggableCommand()));
+        self::assertSame('this_has_precedence', $filenameProvider(new DummyNamedLoggableCommand()));
     }
 
     public function testFallbackNameFromClassname(): void
     {
         $filenameProvider = new DefaultFilenameProvider();
 
-        $this->assertSame('dummy_loggable_output', $filenameProvider(new DummyLoggableOutput()));
-        $this->assertSame('dummy_loggable_command_without_name', $filenameProvider(new DummyLoggableCommandWithoutName()));
+        self::assertSame('dummy_loggable_output', $filenameProvider(new DummyLoggableOutput()));
+        self::assertSame('dummy_loggable_command_without_name', $filenameProvider(new DummyLoggableCommandWithoutName()));
     }
 }

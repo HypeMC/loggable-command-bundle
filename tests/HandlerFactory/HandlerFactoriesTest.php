@@ -33,14 +33,14 @@ final class HandlerFactoriesTest extends TestCase
             'date_format' => $dateFormat = 'Y_m_d',
         ]);
 
-        $this->assertSame($path, $this->getPropertyValue($handler, 'filename'));
-        $this->assertSame($maxFiles, $this->getPropertyValue($handler, 'maxFiles'));
-        $this->assertSame($level, $this->getPropertyValue($handler, 'level'));
-        $this->assertSame($bubble, $this->getPropertyValue($handler, 'bubble'));
-        $this->assertSame($filePermission, $this->getPropertyValue($handler, 'filePermission'));
-        $this->assertSame($useLocking, $this->getPropertyValue($handler, 'useLocking'));
-        $this->assertSame($filenameFormat, $this->getPropertyValue($handler, 'filenameFormat'));
-        $this->assertSame($dateFormat, $this->getPropertyValue($handler, 'dateFormat'));
+        self::assertSame($path, $this->getPropertyValue($handler, 'filename'));
+        self::assertSame($maxFiles, $this->getPropertyValue($handler, 'maxFiles'));
+        self::assertSame($level, $this->getPropertyValue($handler, 'level'));
+        self::assertSame($bubble, $this->getPropertyValue($handler, 'bubble'));
+        self::assertSame($filePermission, $this->getPropertyValue($handler, 'filePermission'));
+        self::assertSame($useLocking, $this->getPropertyValue($handler, 'useLocking'));
+        self::assertSame($filenameFormat, $this->getPropertyValue($handler, 'filenameFormat'));
+        self::assertSame($dateFormat, $this->getPropertyValue($handler, 'dateFormat'));
     }
 
     public function testStreamHandlerIsConfiguredAsExpected(): void
@@ -56,11 +56,11 @@ final class HandlerFactoriesTest extends TestCase
             'use_locking' => $useLocking = true,
         ]);
 
-        $this->assertSame($path, $this->getPropertyValue($handler, 'url'));
-        $this->assertSame($level, $this->getPropertyValue($handler, 'level'));
-        $this->assertSame($bubble, $this->getPropertyValue($handler, 'bubble'));
-        $this->assertSame($filePermission, $this->getPropertyValue($handler, 'filePermission'));
-        $this->assertSame($useLocking, $this->getPropertyValue($handler, 'useLocking'));
+        self::assertSame($path, $this->getPropertyValue($handler, 'url'));
+        self::assertSame($level, $this->getPropertyValue($handler, 'level'));
+        self::assertSame($bubble, $this->getPropertyValue($handler, 'bubble'));
+        self::assertSame($filePermission, $this->getPropertyValue($handler, 'filePermission'));
+        self::assertSame($useLocking, $this->getPropertyValue($handler, 'useLocking'));
     }
 
     private function getPropertyValue(HandlerInterface $handler, string $propertyName)

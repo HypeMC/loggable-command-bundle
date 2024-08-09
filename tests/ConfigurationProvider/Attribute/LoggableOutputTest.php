@@ -21,8 +21,8 @@ final class LoggableOutputTest extends TestCase
             ->getOptions()
         ;
 
-        $this->assertSame('yes', $options['filename']);
-        $this->assertFalse($options['bubble']);
+        self::assertSame('yes', $options['filename']);
+        self::assertFalse($options['bubble']);
     }
 
     /**
@@ -30,10 +30,10 @@ final class LoggableOutputTest extends TestCase
      */
     public function testLevelIsOKWhenStringOrInt($expected, array $arguments): void
     {
-        $this->assertSame($expected, (new LoggableOutput(...$arguments))->getOptions()['level']);
+        self::assertSame($expected, (new LoggableOutput(...$arguments))->getOptions()['level']);
     }
 
-    public function validLevels(): iterable
+    public static function validLevels(): iterable
     {
         yield 'Option int' => [
             400,
@@ -56,7 +56,7 @@ final class LoggableOutputTest extends TestCase
         new LoggableOutput(...$arguments);
     }
 
-    public function invalidLevels(): iterable
+    public static function invalidLevels(): iterable
     {
         yield 'Option' => [
             [['level' => true]],
@@ -70,7 +70,7 @@ final class LoggableOutputTest extends TestCase
     {
         $loggableOutput = new LoggableOutput([], 'name', null, 'stream', null, true, null, 0775);
 
-        $this->assertSame([
+        self::assertSame([
             'filename' => 'name',
             'type' => 'stream',
             'bubble' => true,

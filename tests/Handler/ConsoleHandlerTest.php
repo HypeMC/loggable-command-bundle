@@ -36,52 +36,52 @@ final class ConsoleHandlerTest extends TestCase
         $output->method('getVerbosity')->willReturn(OutputInterface::VERBOSITY_NORMAL);
         $consoleHandler->setOutput($output);
 
-        $output->expects($this->once())->method('write');
+        $output->expects(self::once())->method('write');
         $consoleHandler->handleBatch([$this->getRecord()]);
 
-        $this->assertFalse($innerConsoleHandler->isHandling($this->getRecord(LogLevel::DEBUG)));
-        $this->assertFalse($consoleHandler->isHandling($this->getRecord(LogLevel::DEBUG)));
-        $this->assertTrue($innerConsoleHandler->isHandling($this->getRecord(LogLevel::ERROR)));
-        $this->assertTrue($consoleHandler->isHandling($this->getRecord(LogLevel::ERROR)));
+        self::assertFalse($innerConsoleHandler->isHandling($this->getRecord(LogLevel::DEBUG)));
+        self::assertFalse($consoleHandler->isHandling($this->getRecord(LogLevel::DEBUG)));
+        self::assertTrue($innerConsoleHandler->isHandling($this->getRecord(LogLevel::ERROR)));
+        self::assertTrue($consoleHandler->isHandling($this->getRecord(LogLevel::ERROR)));
 
         $consoleHandler->setBubble(false);
-        $this->assertFalse($innerConsoleHandler->getBubble());
-        $this->assertFalse($consoleHandler->getBubble());
+        self::assertFalse($innerConsoleHandler->getBubble());
+        self::assertFalse($consoleHandler->getBubble());
         $consoleHandler->setBubble(true);
-        $this->assertTrue($innerConsoleHandler->getBubble());
-        $this->assertTrue($consoleHandler->getBubble());
+        self::assertTrue($innerConsoleHandler->getBubble());
+        self::assertTrue($consoleHandler->getBubble());
 
         $consoleHandler->setLevel(LogLevel::NOTICE);
-        $this->assertSame(Logger::toMonologLevel(LogLevel::NOTICE), $innerConsoleHandler->getLevel());
-        $this->assertSame(Logger::toMonologLevel(LogLevel::NOTICE), $consoleHandler->getLevel());
+        self::assertSame(Logger::toMonologLevel(LogLevel::NOTICE), $innerConsoleHandler->getLevel());
+        self::assertSame(Logger::toMonologLevel(LogLevel::NOTICE), $consoleHandler->getLevel());
         $consoleHandler->setLevel(LogLevel::WARNING);
-        $this->assertSame(Logger::toMonologLevel(LogLevel::WARNING), $innerConsoleHandler->getLevel());
-        $this->assertSame(Logger::toMonologLevel(LogLevel::WARNING), $consoleHandler->getLevel());
+        self::assertSame(Logger::toMonologLevel(LogLevel::WARNING), $innerConsoleHandler->getLevel());
+        self::assertSame(Logger::toMonologLevel(LogLevel::WARNING), $consoleHandler->getLevel());
 
         $consoleHandler->onTerminate(new ConsoleTerminateEvent(
             new Command(), $this->createMock(InputInterface::class), $this->createMock(OutputInterface::class), 0
         ));
-        $this->assertFalse($innerConsoleHandler->isHandling($this->getRecord(LogLevel::ERROR)));
-        $this->assertFalse($consoleHandler->isHandling($this->getRecord(LogLevel::ERROR)));
+        self::assertFalse($innerConsoleHandler->isHandling($this->getRecord(LogLevel::ERROR)));
+        self::assertFalse($consoleHandler->isHandling($this->getRecord(LogLevel::ERROR)));
 
         $formatter = $this->createMock(FormatterInterface::class);
         $consoleHandler->setFormatter($formatter);
-        $this->assertSame($formatter, $innerConsoleHandler->getFormatter());
-        $this->assertSame($formatter, $consoleHandler->getFormatter());
+        self::assertSame($formatter, $innerConsoleHandler->getFormatter());
+        self::assertSame($formatter, $consoleHandler->getFormatter());
 
         $processor = $this->createMock(ProcessorInterface::class);
         $consoleHandler->pushProcessor($processor);
-        $this->assertSame($processor, $innerConsoleHandler->popProcessor());
+        self::assertSame($processor, $innerConsoleHandler->popProcessor());
         $consoleHandler->pushProcessor($processor);
-        $this->assertSame($processor, $consoleHandler->popProcessor());
+        self::assertSame($processor, $consoleHandler->popProcessor());
 
         $processor = $this->createMock(DummyResettableProcessor::class);
-        $processor->expects($this->exactly(2))->method('reset');
+        $processor->expects(self::exactly(2))->method('reset');
         $consoleHandler->pushProcessor($processor);
         $innerConsoleHandler->reset();
         $consoleHandler->reset();
 
-        $this->assertSame(BaseConsoleHandler::getSubscribedEvents(), ConsoleHandler::getSubscribedEvents());
+        self::assertSame(BaseConsoleHandler::getSubscribedEvents(), ConsoleHandler::getSubscribedEvents());
     }
 
     /**
@@ -104,12 +104,12 @@ final class ConsoleHandlerTest extends TestCase
         $consoleHandler = new ConsoleHandler(new BaseConsoleHandler());
         $consoleHandler->onCommand($event);
 
-        ${$expectedOutput}->expects($this->once())
+        ${$expectedOutput}->expects(self::once())
             ->method('write')
-            ->with($this->stringContains('Lorem ipsum'), false, OutputInterface::VERBOSITY_DEBUG)
+            ->with(self::stringContains('Lorem ipsum'), false, OutputInterface::VERBOSITY_DEBUG)
         ;
 
-        ${$silentOutput}->expects($this->never())
+        ${$silentOutput}->expects(self::never())
             ->method('write')
         ;
 
@@ -118,7 +118,7 @@ final class ConsoleHandlerTest extends TestCase
         $consoleHandler->handle($this->getRecord($level));
     }
 
-    public function outputData(): iterable
+    public static function outputData(): iterable
     {
         yield 'NOTICE with threshold level WARNING' => [
             'standardOutput',
