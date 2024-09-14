@@ -25,6 +25,7 @@ return (new PhpCsFixer\Config())
         ],
         'self_static_accessor' => true,
         'single_line_throw' => false,
+        'trailing_comma_in_multiline' => ['after_heredoc' => true, 'elements' => ['array_destructuring', 'arrays']],
         'whitespace_after_comma_in_array' => ['ensure_single_space' => true],
         // PHP 7 compatibility
         'get_class_to_class_keyword' => false,
